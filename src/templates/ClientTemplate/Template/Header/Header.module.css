@@ -1,0 +1,46 @@
+.logo{
+    width: 4vw;
+    height: 4vw;
+}
+/* desktop >=1024 */
+@media screen and (min-width:1023.99px) {
+    .rs_header{
+        font-size: 1.5vw;
+    }
+}
+/* Screen Lg < 992 */
+@media screen and (max-width:991.99px) {
+    .rs_header{
+        font-size: 1.6vw;
+        justify-content: space-around;
+    }
+    .logo{
+        width: 5vw;
+        height: 5vw;
+    }
+}
+/* Screen md < 768 */
+@media screen and (max-width:767.99px) {
+    .rs_header{
+        font-size: 2.3vw;
+        justify-content: space-around;
+    }
+    .logo{
+        min-width: 7vw;
+        min-height: 7vw;
+    }
+}
+/* screen <450 */
+@media screen and (max-width:449.99px) {
+    .rs_menu{
+        visibility: hidden;
+    }
+    .rs_bar{
+       display: block;
+    }
+}
+@media screen and (min-width:360px ) and (max-width:768px) {
+    .rs_btn{
+        display:none;
+    }
+}

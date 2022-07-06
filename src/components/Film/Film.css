@@ -1,0 +1,28 @@
+
+.parent {
+    position: relative;
+}
+.child{
+    position:absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    opacity: 0;
+    transition: all 0.5s;
+}
+.moTa{
+    transition: all 0.1s;
+}
+.playVideo{
+    opacity: 0;
+    transition: all 0.1s;
+}
+.parent:hover .child {
+    opacity: 1;
+}
+.parent:hover .playVideo{
+    opacity: 1;
+}
+.parent:hover .moTa{
+    opacity: 0;
+}

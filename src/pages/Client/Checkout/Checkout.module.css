@@ -1,0 +1,23 @@
+.shadow_right {
+    -webkit-box-shadow: -11px 0px 11px -9px rgba(0, 0, 0, 0.34);
+    box-shadow: -11px 0px 11px -9px rgba(0, 0, 0, 0.34);
+  }
+  #trapezoid {
+    border-bottom-width: 30px;
+    border-bottom-style: solid;
+    border-bottom-color: linear-gradient(
+      to bottom,
+      #000000 0%,
+      #8d878d 4%,
+      #ffffff 100%
+    );
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    height: 0;
+    opacity: 0.3;
+    width: 100%;
+    filter: saturate(98%) opacity(87%) drop-shadow(0px 27px 10px #a9a2a2);
+    -webkit-filter: saturate(98%) opacity(87%) drop-shadow(0px 27px 10px #a9a2a2);
+    -moz-filter: saturate(98%) opacity(87%) drop-shadow(0px 27px 10px #a9a2a2);
+  }
+  
