@@ -1,15 +1,22 @@
-import React, { Fragment } from 'react'
+import React, { Fragment ,useEffect, useState} from 'react'
 import { NavLink } from 'react-router-dom'
 import { history } from '../../../../App'
-import { useDispatch } from 'react-redux';
-import { Menu, Dropdown } from 'antd';
+import { useDispatch,useSelector} from 'react-redux';
+import { Menu, Dropdown,Input } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import _ from 'lodash';
+import { layDanhSachPhimAction } from '../../../../redux/Actions/QuanLyPhimAction';
 import { SIGN_OUT } from '../../../../redux/Types/QuanLyNguoiDungType';
 import styles from './Header.module.css'
 export default function Header(props) {
+    const [search,setSearch]= useState('');
+    const [open,setOpen]= useState(false)
     const userLogin = JSON.parse(sessionStorage.getItem("USER_LOGIN"));
+    const { lstPhim } = useSelector(state => state.QuanLyPhimReducer);
     const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(layDanhSachPhimAction());
+    }, [])
     const menu = (
         <Menu>
             <Menu.Item key="0">
@@ -20,6 +27,7 @@ export default function Header(props) {
             </Menu.Item>
         </Menu>
     );
+
     const handleLogin = () => {
         return <div className={`${styles.rs_btn}`} id='rs_btn'>
             {_.isEmpty(userLogin) ? <div className="items-center  flex-shrink-0  lg:flex">
@@ -36,12 +44,30 @@ export default function Header(props) {
             }
         </div>
     }
+    const onSearch = value => {
+            setSearch(value)
+        if(value===''){
+            setOpen(false)
+        }else{
+            setOpen(true);
+            dispatch(layDanhSachPhimAction(search));
+        }
+    };
+    console.log('search',search);
+    const { Search } = Input;
     return (
+        <div className='relative'>
+
+        
         <nav className=" border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800 text-coolGray-800 fixed z-10 w-full bg-black bg-opacity-40">
             <div className="lg:container flex flex-wrap justify-between items-center mx-auto">
                 <NavLink to='/home' className="flex items-center">
                     <img src="tix.png" className={`mr-3 h-6 sm:h-9 ${styles.logo}`} alt="Logo" />
                 </NavLink>
+                <div className='mx-36 my-3'>
+                    <Search placeholder="Nhập tên phim" onSearch={onSearch} enterButton />
+                    
+                </div>
                 <div>
                     <button onClick={() => {
                         const targetEl = document.getElementById('mobile_menu');
@@ -77,8 +103,25 @@ export default function Header(props) {
                 {handleLogin()}
             </div>
         </nav>
+        {open === true ? <div className='absolute top-16 left-96 z-50 bg-black rounded-md'>
+        {lstPhim.length > 0 &&
+            lstPhim.map((item,index)=>{
+                return(
+                    <div className='w-72 my-4 ml-10 cursor-pointer text-white hover:text-yellow-400 hover:font-bold' key={index}
+                    // onClick={() => { history.push('/signIn') }}
+                    onClick={() => { history.push(`/DetailsFilm/${item.id}`) }}
+                    >
+                        
+                           {item.nameFilm}
+                        
+                    </div>
+                )
+            }
+        )}
+        </div>:''}
+        
 
-
+</div>
 
     )
 }
