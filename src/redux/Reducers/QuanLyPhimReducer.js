@@ -1,9 +1,10 @@
 import _ from 'lodash';
 import { ThongTinPhim } from '../../_core/Models/FilmModel';
-import { PHIM_DANG_CHIEU, PHIM_EDIT, PHIM_SAP_CHHIEU, SET_PHIM } from '../Types/QuanLyPhimType'
+import { PHIM_DANG_CHIEU, PHIM_EDIT, PHIM_SAP_CHHIEU, SEARCH_PHIM, SET_PHIM } from '../Types/QuanLyPhimType'
 const initialState = {
     lstPhim: [],
     lstPhimDefault: [],
+    lstSearchPhim: [],
     phimEdit: new ThongTinPhim()
 }
 
@@ -14,6 +15,10 @@ export default (state = initialState, action) => {
         case SET_PHIM: {
             state.lstPhim = action.dataPhim;
             state.lstPhimDefault = action.dataPhim;
+            return { ...state }
+        }
+        case SEARCH_PHIM: {
+            state.lstSearchPhim = action.dataSearch
             return { ...state }
         }
         case PHIM_EDIT: {

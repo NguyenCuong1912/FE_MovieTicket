@@ -1,6 +1,6 @@
 import { history } from '../../App';
 import { quanLyPhimServices } from '../../services/QuanLyPhimServices'
-import { PHIM_EDIT, SET_PHIM } from '../Types/QuanLyPhimType';
+import { PHIM_EDIT, SEARCH_PHIM, SET_PHIM } from '../Types/QuanLyPhimType';
 import { message } from 'antd';
 export const layDanhSachPhimAction = (name = '') => {
     return async dispatch => {
@@ -10,6 +10,21 @@ export const layDanhSachPhimAction = (name = '') => {
                 dispatch({
                     type: SET_PHIM,
                     dataPhim: result.data
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+export const timKiemPhimAction = (name = '') => {
+    return async dispatch => {
+        try {
+            const result = await quanLyPhimServices.layDanhSachPhim(name);
+            if (result.status === 200) {
+                dispatch({
+                    type: SEARCH_PHIM,
+                    dataSearch: result.data
                 })
             }
         } catch (error) {

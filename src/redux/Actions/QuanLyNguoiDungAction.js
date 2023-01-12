@@ -13,6 +13,7 @@ export const signUp = (thongTinUser, type = 1) => {
                 const result = await quanLyNguoiDungServices.signUp(thongTinUser);
                 if (result.status === 201) {
                     message.success("Đăng kí tài khoản thành công");
+                    history.push('/signUp')
                 } else {
                     message.error("Đăng kí tài khoản thất bại");
                 }
@@ -21,6 +22,7 @@ export const signUp = (thongTinUser, type = 1) => {
                 const result = await quanLyNguoiDungServices.signUp(thongTinUser);
                 if (result.status === 201) {
                     message.success("Đăng kí tài khoản thành công");
+                    history.push('/signUp')
                 } else {
                     message.error("Đăng kí tài khoản thất bại");
                 }
