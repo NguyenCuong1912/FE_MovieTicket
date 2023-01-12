@@ -44,65 +44,70 @@ export default function Template(props) {
     const menu = (
         <Menu>
             <Menu.Item key="0">
-                <NavLink to={`/Profile`}>Cập nhật thông tin</NavLink>
+                <NavLink to={ `/Profile` }>Cập nhật thông tin</NavLink>
             </Menu.Item>
             <Menu.Item key="1">
-                <NavLink onClick={() => {
+                <NavLink onClick={ () => {
                     Cookies.remove('cookieUser')
                     dispatch({
                         type: SIGN_OUT
                     })
-                }} to='/signIn'>Đăng xuất</NavLink>
+                } } to='/signIn'>Đăng xuất</NavLink>
             </Menu.Item>
         </Menu>
     );
     const { Component, ...resRoute } = props;
 
-    return <Route {...resRoute} render={(propsRoute) => {
+    return <Route { ...resRoute } render={ (propsRoute) => {
         return <Fragment>
-            <Layout style={{ minHeight: '100vh' }}>
-                <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
+            <Layout style={ { minHeight: '100vh' } }>
+                <Sider collapsible collapsed={ collapsed } onCollapse={ onCollapse }>
                     <div className="logo" />
-                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                        <Menu.Item key="1" icon={<HomeOutlined />}>
+                    <Menu theme="dark" defaultSelectedKeys={ ['1'] } mode="inline">
+                        <Menu.Item key="1" icon={ <HomeOutlined /> }>
                             <NavLink to='/Admin/Home'>Dashboard</NavLink>
                         </Menu.Item>
-                        <Menu.Item key="2" icon={<UserOutlined />}>
+                        <Menu.Item key="2" icon={ <UserOutlined /> }>
                             <NavLink to='/Admin/Users'>Tài Khoản</NavLink>
                         </Menu.Item>
-                        <Menu.Item key="3" icon={<ClusterOutlined />}>
+                        <Menu.Item key="3" icon={ <ClusterOutlined /> }>
                             <NavLink to='/Admin/GroupCinemas'>Cụm Rạp</NavLink>
                         </Menu.Item>
-                        <Menu.Item key="4" icon={<ShopOutlined />}>
+                        <Menu.Item key="4" icon={ <ShopOutlined /> }>
                             <NavLink to='/Admin/Cinemas'>Rạp Chiếu</NavLink>
                         </Menu.Item>
-                        <Menu.Item key="5" icon={<DesktopOutlined />}>
+                        <Menu.Item key="5" icon={ <DesktopOutlined /> }>
                             <NavLink to='/Admin/Rooms'>Phòng</NavLink>
                         </Menu.Item>
-                        <Menu.Item key="6" icon={<VideoCameraOutlined />}>
+                        <Menu.Item key="6" icon={ <VideoCameraOutlined /> }>
                             <NavLink to='/Admin/Films'>Phim</NavLink>
                         </Menu.Item>
-                        <Menu.Item key="7" icon={<CalendarOutlined />}>
+                        <Menu.Item key="7" icon={ <CalendarOutlined /> }>
                             <NavLink to='/Admin/ShowTimes'>Lịch Chiếu</NavLink>
                         </Menu.Item>
-                        <Menu.Item key="8" icon={<WomanOutlined />}>
+                        <Menu.Item key="8" icon={ <WomanOutlined /> }>
                             <NavLink to='/Admin/TypeUsers'>Loại Người Dùng</NavLink>
                         </Menu.Item>
                     </Menu>
                 </Sider>
                 <Layout className="site-layout">
-                    <Header className="site-layout-background " style={{ padding: 0, height: '45px' }} >
+                    <Header className="site-layout-background " style={ { padding: 0, height: '45px' } } >
                         <div className="flex justify-end items-center h-full px-10 cursor-pointer">
-                            <Dropdown overlay={menu} trigger={['click']} >
-                                <span className="ant-dropdown-link text-white" onClick={e => e.preventDefault()}>
-                                    {userLogin.userName}  <DownOutlined />
+                            <Dropdown overlay={ menu } trigger={ ['click'] } >
+                                <span className="ant-dropdown-link text-white" onClick={ e => e.preventDefault() }>
+                                    { userLogin.userName }  <DownOutlined />
                                 </span>
                             </Dropdown>
+                            <div className='ml-3'>
+                                <NavLink to='/' style={ isActive => ({
+                                    color: isActive ? "white" : "white"
+                                }) }>Về trang Home</NavLink>
+                            </div>
                         </div>
                     </Header>
-                    <Component {...propsRoute} />
+                    <Component { ...propsRoute } />
                 </Layout>
             </Layout>
         </Fragment>
-    }} />
+    } } />
 }

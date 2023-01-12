@@ -25,7 +25,7 @@ export const signUp = (thongTinUser, type = 1) => {
                     message.error("Đăng kí tài khoản thất bại");
                 }
             }
-
+            history.push('/signIn')
         } catch (error) {
             message.error("Đăng kí tài khoản thất bại");
         }
