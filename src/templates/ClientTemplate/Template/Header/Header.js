@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { history } from '../../../../App'
 import { useDispatch, useSelector } from 'react-redux';
 import { Menu, Dropdown, Input } from 'antd';
-import { DownOutlined, SearchOutlined } from '@ant-design/icons';
+import { DownOutlined, SearchOutlined, QqOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import { timKiemPhimAction } from '../../../../redux/Actions/QuanLyPhimAction';
 import { SIGN_OUT } from '../../../../redux/Types/QuanLyNguoiDungType';
@@ -34,23 +34,25 @@ export default function Header(props) {
             </div> : <div className="items-center  justify-center flex-shrink-0 hidden lg:flex text-white">
                 <Dropdown overlay={menu} trigger={['click']}>
                     <a className="ant-dropdown-link text-white" onClick={e => e.preventDefault()}>
-                        <span className='mr-3'>{userLogin.userName}</span>    <DownOutlined />
+                        <span className='mr-3'>{userLogin.userName}</span><DownOutlined />
                     </a>
                 </Dropdown>
-
+                {
+                    userLogin?.typeUser.type !== "CLIENT" ?
+                        <div className='mb-0 ml-3 text-xl flex justify-center items-center'>
+                            <p className='mb-0'><QqOutlined /></p>
+                            <NavLink style={isActive => ({
+                                color: isActive ? "white" : "white"
+                            })} to='/Admin/Home' >Quản lý</NavLink>
+                        </div> : <Fragment></Fragment>
+                }
             </div>
+
             }
         </div>
     }
 
-    const onSearch = async value => {
-        if (value === '') {
-            setOpen(false)
-        } else {
-            setOpen(true);
-            await dispatch(timKiemPhimAction(value));
-        }
-    };
+
     const formik = useFormik({
         initialValues: {
             tenPhim: '',
