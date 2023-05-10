@@ -11,24 +11,6 @@ export default function HomeClient(props) {
     const { showTime } = useSelector(state => state.QuanLyLichChieuReducer)
     const dispatch = useDispatch();
     useEffect(() => {
-        window.addEventListener('error', e => {
-            if (e.message === 'ResizeObserver loop limit exceeded') {
-                const resizeObserverErrDiv = document.getElementById(
-                    'webpack-dev-server-client-overlay-div'
-                );
-                const resizeObserverErr = document.getElementById(
-                    'webpack-dev-server-client-overlay'
-                );
-                if (resizeObserverErr) {
-                    resizeObserverErr.setAttribute('style', 'display: none');
-                }
-                if (resizeObserverErrDiv) {
-                    resizeObserverErrDiv.setAttribute('style', 'display: none');
-                }
-            }
-        });
-    }, []);
-    useEffect(() => {
         window.history.scrollRestoration = 'manual';
         dispatch(layDanhSachPhimAction())
         dispatch(lichChieuTheoHeThongRap())

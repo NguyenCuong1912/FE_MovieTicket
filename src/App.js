@@ -1,50 +1,69 @@
-import React, { Suspense } from 'react'
-import { Switch, Route, Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import SignUp from './pages/Admin/SignUp/SignUp';
-import { Form } from './templates/AdminTemplate/Form/Form';
-import SignIn from './pages/Admin/SignIn/SignIn';
-import Template from './templates/AdminTemplate/Template/Template';
-import Home from './pages/Admin/Home/Home';
-import User from './pages/Admin/User/User';
-import UserEdit from './pages/Admin/User/Edit/UserEdit';
-import UserCreate from './pages/Admin/User/Create/UserCreate';
-import Film from './pages/Admin/Film/Film';
-import FilmCreate from './pages/Admin/Film/Create/FilmCreate';
-import FilmEdit from './pages/Admin/Film/Edit/FilmEdit';
-import GroupCinema from './pages/Admin/GroupCinema/GroupCinema';
-import GroupCinemaCreate from './pages/Admin/GroupCinema/Create/GroupCinemaCreate';
-import GroupCinemaEdit from './pages/Admin/GroupCinema/Edit/GroupCinemaEdit';
+import React, { useEffect } from 'react';
+import { Route, Router, Switch } from 'react-router-dom';
+import Loading from './components/Loading/Loading';
+import ModalTrailer from './components/Modal/ModalTrailer';
+import Checkout_Error from './components/Success_Error/Checkout_Error';
+import Checkout_Success from './components/Success_Error/Checkout_Success';
 import Cinema from './pages/Admin/Cinema/Cinema';
 import CinemaCreate from './pages/Admin/Cinema/Create/CinemaCreate';
 import CinemaEdit from './pages/Admin/Cinema/Edit/CinemaEdit';
-import Room from './pages/Admin/Room/Room';
+import FilmCreate from './pages/Admin/Film/Create/FilmCreate';
+import FilmEdit from './pages/Admin/Film/Edit/FilmEdit';
+import Film from './pages/Admin/Film/Film';
+import GroupCinemaCreate from './pages/Admin/GroupCinema/Create/GroupCinemaCreate';
+import GroupCinemaEdit from './pages/Admin/GroupCinema/Edit/GroupCinemaEdit';
+import GroupCinema from './pages/Admin/GroupCinema/GroupCinema';
+import Home from './pages/Admin/Home/Home';
 import RoomCreate from './pages/Admin/Room/Create/RoomCreate';
 import RoomEdit from './pages/Admin/Room/Edit/RoomEdit';
-import ShowTime from './pages/Admin/ShowTime/ShowTime';
+import Room from './pages/Admin/Room/Room';
 import ShowTimeCreate from './pages/Admin/ShowTime/Create/ShowTimeCreate';
 import ShowTimeEdit from './pages/Admin/ShowTime/Edit/ShowTimeEdit';
-import TypeUser from './pages/Admin/TypeUser/TypeUser';
+import ShowTime from './pages/Admin/ShowTime/ShowTime';
+import UserWithShowTime from './pages/Admin/ShowTime/UserWithShowTime/UserWithShowTime';
+import SignIn from './pages/Admin/SignIn/SignIn';
+import SignUp from './pages/Admin/SignUp/SignUp';
+import Ticket from './pages/Admin/Ticket/Ticket';
 import TypeUserCreate from './pages/Admin/TypeUser/Create/TypeUserCreate';
 import TypeUserEdit from './pages/Admin/TypeUser/Edit/TypeUserEdit';
-import { UserTemplate } from './templates/ClientTemplate/Template/Template';
-import HomeClient from './pages/Client/Home/HomeClient';
-import DetailsFilm from './pages/Client/DetailsFilm/DetailsFilm';
+import TypeUser from './pages/Admin/TypeUser/TypeUser';
+import UserCreate from './pages/Admin/User/Create/UserCreate';
+import UserEdit from './pages/Admin/User/Edit/UserEdit';
+import User from './pages/Admin/User/User';
 import Checkout from './pages/Client/Checkout/Checkout';
-import CheckoutTemplate from './templates/CheckoutTemplate/CheckoutTemplate';
-import ModalTrailer from './components/Modal/ModalTrailer';
-import Profile from './pages/Client/Profile/Profile';
-import GroupCinemaClient from './pages/Client/GroupCinemaClient/GroupCinema';
-import SystemCinema from './pages/Client/SystemCinema/SystemCinema';
 import DetailsCinema from './pages/Client/DetailsCinema/DetailsCinema';
-import Ticket from './pages/Admin/Ticket/Ticket';
-import UserWithShowTime from './pages/Admin/ShowTime/UserWithShowTime/UserWithShowTime';
-import Checkout_Success from './components/Success_Error/Checkout_Success';
-import Checkout_Error from './components/Success_Error/Checkout_Error';
-import Loading from './components/Loading/Loading';
+import DetailsFilm from './pages/Client/DetailsFilm/DetailsFilm';
+import GroupCinemaClient from './pages/Client/GroupCinemaClient/GroupCinema';
+import HomeClient from './pages/Client/Home/HomeClient';
+import Profile from './pages/Client/Profile/Profile';
+import SystemCinema from './pages/Client/SystemCinema/SystemCinema';
+import { Form } from './templates/AdminTemplate/Form/Form';
+import Template from './templates/AdminTemplate/Template/Template';
+import CheckoutTemplate from './templates/CheckoutTemplate/CheckoutTemplate';
+import { UserTemplate } from './templates/ClientTemplate/Template/Template';
 
 export const history = createBrowserHistory();
 export default function App() {
+
+  useEffect(() => {
+    window.addEventListener('error', e => {
+      if (e.message === 'ResizeObserver loop limit exceeded') {
+        const resizeObserverErrDiv = document.getElementById(
+          'webpack-dev-server-client-overlay-div'
+        );
+        const resizeObserverErr = document.getElementById(
+          'webpack-dev-server-client-overlay'
+        );
+        if (resizeObserverErr) {
+          resizeObserverErr.setAttribute('style', 'display: none');
+        }
+        if (resizeObserverErrDiv) {
+          resizeObserverErrDiv.setAttribute('style', 'display: none');
+        }
+      }
+    });
+  }, []);
   return (
     <Router history={history}>
       <Loading />

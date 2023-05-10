@@ -8,7 +8,7 @@ import { history } from '../../../App';
 import { DOMAIN_STATIC_FILE } from '../../../utils/Settings/config';
 const { TabPane } = Tabs;
 function HomeMenu(props) {
-    const { lichChieu } = props
+    const { lichChieu, lstPhim } = props
     const dispatch = useDispatch();
     const [state, setState] = useState({
         tabPosition: 'left',
@@ -16,10 +16,19 @@ function HomeMenu(props) {
 
     return (
         <>
-            <Tabs className='border rounded mx-2' tabPosition={state.tabPosition}>
+            <Tabs style={{
+                margin: 10
+            }} className='border rounded mx-2' tabPosition={state.tabPosition}>
                 {lichChieu?.map((item, index) => {
                     return <TabPane tab={
-                        <div >
+                        <div
+                            style={{
+                                height: '10vh',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
                             <img style={{ objectFit: 'cover' }} className='w-10 rounded-full' src={`${DOMAIN_STATIC_FILE}${item.logo}`} alt={`${DOMAIN_STATIC_FILE}${item.logo}`} />
                         </div>}
                         key={index}>
@@ -28,7 +37,9 @@ function HomeMenu(props) {
                                 {item.listRap?.map((rap, index) => {
                                     return <TabPane key={index} tab={
                                         <div className='flex w-25 pb-2 border-b' >
-                                            <div className='h-16 w-16'>
+                                            <div style={{
+                                                margin: 10
+                                            }} className='h-16 w-16'>
                                                 <img style={{ objectFit: 'cover' }} className='w-full h-full' src={`${DOMAIN_STATIC_FILE}${rap.logo}`} alt={`${DOMAIN_STATIC_FILE}${rap.logo}`} />
                                             </div>
                                             <div className='flex flex-col items-start flex-wrap ml-2'>
@@ -39,16 +50,20 @@ function HomeMenu(props) {
                                         </div>
                                     }>
                                         {rap.listFilm?.map((phim, index) => {
-                                            return <div key={index} className=' pb-2 mb-2 border-b'>
+                                            return <div style={{
+                                                margin: 10
+                                            }} key={index} className=' pb-2 mb-2 border-b'>
                                                 <div className='flex ml-2' >
-                                                    <img onClick={() => { history.push(`/DetailsFilm/${phim.idFilm}`) }} style={{ objectFit: 'cover' }} className='w-20 h-20 cursor-pointer' src={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`} alt={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`} />
+                                                    <img onClick={() => {
+                                                        history.push(`/DetailsFilm/${phim.idFilm}`)
+                                                    }} style={{ objectFit: 'cover' }} className='w-20 h-20 cursor-pointer' src={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`} alt={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`} />
                                                     <div className='ml-2'>
                                                         <p className='text-lg font-medium text-black'>{phim.nameFilm}</p>
                                                     </div>
                                                 </div>
                                                 <div className='flex flex-wrap mt-2' >
                                                     {phim.lstShowDate?.map((time, index) => {
-                                                        return <button className='rounded m-2 py-0.5 px-4 border' key={index}>
+                                                        return <button className='rounded m-1 mr-3 py-0.5 px-4 border' key={index}>
                                                             <NavLink to={`${`/checkout/${time.id}`}`}>
                                                                 {moment(time.showDate).format('hh:mm A')}
                                                             </NavLink>
