@@ -80,15 +80,15 @@ export default function Header(props) {
                         <img src="tix.png" className={`mr-3 h-6 sm:h-9 ${styles.logo}`} alt="Logo" />
                     </NavLink>
 
-                    <div className='w-1/4 ml-2'>
+                    {/* <div className='w-1/4 ml-2'>
                         <form onSubmit={formik.handleSubmit} className='w-full'>
-                            <div className='flex'>
+                            <div className='flex'> */}
                                 {/* <Search placeholder="Nhập tên phim" onSearch={onSearch} enterButton /> */}
-                                <input name='tenPhim' onChange={formik.handleChange} className="w-4/5 -ml-10 pl-10 pr-3 py-2 rounded-l-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="Nhập tên phim" />
+                                {/* <input name='tenPhim' onChange={formik.handleChange} className="w-4/5 -ml-10 pl-10 pr-3 py-2 rounded-l-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="Nhập tên phim" />
                                 <button type="submit" className="block text-2xl flex items-center justify-center w-1/5 max-w-xs bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-r-lg font-semibold"><SearchOutlined /></button>
                             </div>
                         </form>
-                    </div>
+                    </div> */}
                     <div>
                         <button onClick={() => {
                             const targetel = document.getElementById('mobile_menu');
