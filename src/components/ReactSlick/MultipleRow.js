@@ -42,8 +42,7 @@ export default function MultipleRow(props) {
     }
     const settings = {
         className: "center variable-width",
-        centerMode: true,
-        infinite: true,
+        infinite: false,
         centerPadding: "0px",
         slidesToShow: 4,
         speed: 600,

@@ -3,7 +3,6 @@ import { Bar } from "react-chartjs-2";
 import { quanLyTicketServices } from './../../../services/QuanLyTicketServices';
 export default function Home() {
     const [state, setState] = useState([]);
-    console.log(state)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(async () => {
         try {

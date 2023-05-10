@@ -1,32 +1,31 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import { useSelector, useDispatch } from "react-redux";
-import { Route } from "react-router";
-import { NavLink, Redirect } from 'react-router-dom'
-import { Layout, Menu, Dropdown, } from 'antd';
-import Cookies from 'js-cookie'
 import {
-    DesktopOutlined,
-    UserOutlined,
-    DownOutlined,
     CalendarOutlined,
-    VideoCameraOutlined,
-    WomanOutlined,
-    ShopOutlined,
     ClusterOutlined,
-    HomeOutlined
+    DesktopOutlined,
+    DownOutlined,
+    HomeOutlined,
+    ShopOutlined,
+    UserOutlined,
+    VideoCameraOutlined,
+    WomanOutlined
 } from '@ant-design/icons';
+import { Dropdown, Layout, Menu, } from 'antd';
+import Cookies from 'js-cookie';
+import React, { Fragment, useEffect, useState } from 'react';
+import { useDispatch } from "react-redux";
+import { Route } from "react-router";
+import { NavLink, Redirect } from 'react-router-dom';
 import { SIGN_OUT } from '../../../redux/Types/QuanLyNguoiDungType';
-import { history } from './../../../App';
 const { Sider, Header } = Layout;
 export default function Template(props) {
     const [collapsed, setCollapsed] = useState(false);
     const userLogin = JSON.parse(sessionStorage.getItem("USER_LOGIN"));
     const dispatch = useDispatch();
-    if (!Cookies.get('cookieUser')) {
-        sessionStorage.removeItem('USER_LOGIN');
-        alert("Bạn đã hết phiên cần đăng nhập lại");
-        history.push(`/signIn`)
-    }
+    // if (!Cookies.get('cookieUser')) {
+    //     sessionStorage.removeItem('USER_LOGIN');
+    //     alert("Bạn đã hết phiên cần đăng nhập lại");
+    //     history.push(`/signIn`)
+    // }
     useEffect(() => {
         window.scrollTo(0, 0);
     })

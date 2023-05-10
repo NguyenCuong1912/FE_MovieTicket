@@ -30,12 +30,12 @@ export default function Film(props) {
             dataIndex: 'imgFilm',
             render: (text, film) => {
                 return <div style={{ width: 100, height: 100, backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url(${DOMAIN_STATIC_FILE}${film.imgFilm})` }}>
-                    <img style={{ width: 100, height: 100, opacity: 1 }} src={`${DOMAIN_STATIC_FILE}${film.imgFilm}`} alt={film.imgFilm}
+                    {/* <img style={{ width: 100, height: 100, opacity: 1 }} src={`${DOMAIN_STATIC_FILE}${film.imgFilm}`} alt={film.imgFilm}
                         onError={({ currentTarget }) => {
                             currentTarget.onerror = null; // prevents looping
                             currentTarget.src = `https://picsum.photos/id/200/300`;
                         }}
-                    />
+                    /> */}
                 </div>
             },
             width: '15%'

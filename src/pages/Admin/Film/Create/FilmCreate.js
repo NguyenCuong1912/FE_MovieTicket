@@ -43,7 +43,6 @@ export default function FilmCreate(props) {
                     formData.append('films', values.imgFilm, values.imgFilm.name)
                 }
             }
-            console.log(values)
             dispatch(themPhimAction(formData));
 
         },
