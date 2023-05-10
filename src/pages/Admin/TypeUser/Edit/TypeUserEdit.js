@@ -10,7 +10,6 @@ import * as Yup from "yup";
 export default function TypeUserEdit(props) {
     const dispatch = useDispatch();
     const { userTypeEdit } = useSelector(state => state.QuanLyLoaiNguoiDungReducer);
-    console.log("edit", userTypeEdit)
     useEffect(() => {
         dispatch(chiTietLoaiNguoiDungAction(props.match.params.id))
     }, [])

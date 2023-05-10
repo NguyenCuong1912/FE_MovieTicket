@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { CustomCard } from '@tsamantanis/react-glassmorphism'
-import '@tsamantanis/react-glassmorphism/dist/index.css'
-import '../../../components/CircleRating/CircleRating.css'
-import { useSelector, useDispatch } from 'react-redux';
-import moment from 'moment';
-import { Rate, Button, Tabs } from 'antd';
+import { CustomCard } from '@tsamantanis/react-glassmorphism';
+import '@tsamantanis/react-glassmorphism/dist/index.css';
+import { Button, Rate, Tabs } from 'antd';
 import _ from 'lodash';
+import moment from 'moment';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { layChiTietPhimAction } from './../../../redux/Actions/QuanLyPhimAction';
-import { DOMAIN_STATIC_FILE } from '../../../utils/Settings/config';
+import '../../../components/CircleRating/CircleRating.css';
 import { lichChieuTheoHeThongRap } from '../../../redux/Actions/QuanLyLichChieuAction';
+import { DOMAIN_STATIC_FILE } from '../../../utils/Settings/config';
+import { layChiTietPhimAction } from './../../../redux/Actions/QuanLyPhimAction';
 export default function DetailsFilm(props) {
     const dispatch = useDispatch();
     const { phimEdit } = useSelector(state => state.QuanLyPhimReducer);
@@ -20,6 +20,13 @@ export default function DetailsFilm(props) {
         dispatch(lichChieuTheoHeThongRap(id))
     }, [])
     const { TabPane } = Tabs;
+
+    const renderContact = () => {
+        return <view>
+            <p>Bạn muốn nhắn nhủ gì tới chúng tôi ?</p>
+        </view>
+    }
+
     return (
         <div className='bg-cover bg-center' style={{ backgroundImage: `url(${DOMAIN_STATIC_FILE}${phimEdit.imgFilm})`, }}>
             <CustomCard
@@ -32,7 +39,7 @@ export default function DetailsFilm(props) {
                 <div className='grid grid-cols-12'>
                     <div className='col-span-5 col-start-3'>
                         <div className='grid grid-cols-3'>
-                            <img style={{ width: '100%', height: 250 }} src={`${DOMAIN_STATIC_FILE}${phimEdit.imgFilm}`} alt={`${phimEdit.imgFilm}`} />
+                            <img style={{ width: '100%', height: 250, objectFit: 'cover' }} src={`${DOMAIN_STATIC_FILE}${phimEdit.imgFilm}`} alt={`${phimEdit.imgFilm}`} />
                             <div className='flex flex-col  justify-center ml-5 col-span-2'>
                                 <p className='text-2xl font-bold'>{phimEdit.nameFilm}</p>
                                 <p>{phimEdit.description}</p>
@@ -61,7 +68,7 @@ export default function DetailsFilm(props) {
                                     {showTime?.map((rapChieu, index) => {
                                         return <TabPane className='my-3' key={index} tab={
                                             <div >
-                                                <img style={{ width: 50, height: 50 }} src={`${DOMAIN_STATIC_FILE}${rapChieu.logo}`} alt={rapChieu.logo} />
+                                                <img style={{ width: 50, height: 50, objectFit: 'cover' }} src={`${DOMAIN_STATIC_FILE}${rapChieu.logo}`} alt={rapChieu.logo} />
                                             </div>
                                         }
                                         >
@@ -102,7 +109,9 @@ export default function DetailsFilm(props) {
                                 Chi tiết
                             </TabPane>
                             <TabPane tab="Liên hệ" key="3">
-                                Liên hệ
+                                {
+                                    renderContact()
+                                }
                             </TabPane>
                         </Tabs>
 

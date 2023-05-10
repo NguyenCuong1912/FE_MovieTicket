@@ -90,7 +90,7 @@ function Checkout(props) {
                     <table className="table-auto min-w-full text-center">
                         <thead>
                             <tr>
-                                <th className='w-10 ' >Ghế Trống</th>
+                                <th className='w-10'>Ghế Trống</th>
                                 <th className='w-10'>Ghế Đã đặt</th>
                                 <th className='w-10'>Ghế Bạn Đặt</th>
                                 <th className='w-10'>Ghế bạn đang chọn</th>

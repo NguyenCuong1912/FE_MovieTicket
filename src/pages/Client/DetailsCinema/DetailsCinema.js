@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { quanLyPhongServices } from '../../../services/QuanLyPhongServices';
-import { quanLyRapChieuServices } from '../../../services/QuanLyRapChieuServices';
 import { chiTietRapAction } from './../../../redux/Actions/QuanLyRapChieuAction';
 export default function DetailsCinema(props) {
     const dispatch = useDispatch();
     const { rapChieuEdit } = useSelector(state => state.QuanLyRapChieuReducer);
     const [state, setState] = useState({ lstRoom: [] });
-    console.log(state)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(async () => {
         dispatch(chiTietRapAction(props.match.params.id))

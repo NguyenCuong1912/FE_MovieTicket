@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import MultipleRow from '../../../components/ReactSlick/MultipleRow'
-import { layDanhSachCumRapAction } from '../../../redux/Actions/QuanLyCumRapAction';
+import MultipleRow from '../../../components/ReactSlick/MultipleRow';
 import { lichChieuTheoHeThongRap } from '../../../redux/Actions/QuanLyLichChieuAction';
 import { layDanhSachPhimAction } from '../../../redux/Actions/QuanLyPhimAction';
-import CarouselClient from '../../../templates/ClientTemplate/Template/Carousel/CarouselClient'
+import CarouselClient from '../../../templates/ClientTemplate/Template/Carousel/CarouselClient';
 import HomeMenu from './HomeMenu';
 
 export default function HomeClient(props) {

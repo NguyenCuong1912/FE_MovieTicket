@@ -94,7 +94,6 @@ export const layChiTietNguoiDungAction = (id) => {
 }
 export const capNhatNguoiDungAction = (id, userUpdate) => {
     return async dispatch => {
-        console.log(userUpdate)
         try {
             const result = await quanLyNguoiDungServices.capNhatNguoiDung(id, userUpdate);
             if (result.status === 200) {

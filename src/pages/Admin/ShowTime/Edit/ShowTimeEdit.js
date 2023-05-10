@@ -34,7 +34,6 @@ export default function ShowTimeEdit(props) {
         dispatch(layDanhSachRapChieuAction());
         try {
             const result = await quanLySeatsServices.getPriceSeat(props.match.params.id);
-            console.log(result)
             if (result.status === 200) {
                 await setState({
                     ...state, price: Number(result.data.price)
