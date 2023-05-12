@@ -1,8 +1,8 @@
-import { DownOutlined, QqOutlined, SearchOutlined } from '@ant-design/icons';
+import { DownOutlined, QqOutlined, SearchOutlined, CloseCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Dropdown, Menu } from 'antd';
 import { useFormik } from 'formik';
 import _ from 'lodash';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { history } from '../../../../App';
@@ -12,6 +12,8 @@ import styles from './Header.module.css';
 
 export default function Header(props) {
     const [open, setOpen] = useState(false)
+    const [isSearch, setIsSearch] = useState(false)
+    const [loading, setLoading] = useState(false)
     const userLogin = JSON.parse(sessionStorage.getItem("USER_LOGIN"));
     const { lstSearchPhim } = useSelector(state => state.QuanLyPhimReducer);
     const dispatch = useDispatch();
@@ -26,31 +28,47 @@ export default function Header(props) {
         </Menu>
     );
 
-    const handleLogin = () => {
-        return <div className={`${styles.rs_btn}`} id='rs_btn'>
-            {_.isEmpty(userLogin) ? <div className="items-center  flex-shrink-0  lg:flex">
-                <button onClick={() => { history.push('/signIn') }} className={`${styles.rs_header} self-center px-6 py-3 rounded hover:bg-violet-600 text-white`}>Đăng Nhập</button>
-                <button onClick={() => { history.push('/signUp') }} className={`${styles.rs_header} self-center px-6 py-3 font-semibold rounded hover:bg-violet-600 text-white`}>Đăng Kí</button>
-            </div> : <div className="items-center  justify-center flex-shrink-0 hidden lg:flex text-white">
-                <Dropdown overlay={menu} trigger={['click']}>
-                    <a className="ant-dropdown-link text-white" onClick={e => e.preventDefault()}>
-                        <span className='mr-3'>{userLogin.userName}</span><DownOutlined />
-                    </a>
-                </Dropdown>
-                {
-                    userLogin?.typeUser.type !== "CLIENT" ?
-                        <div className='mb-0 ml-3 text-xl flex justify-center items-center'>
-                            <p className='mb-0'><QqOutlined /></p>
-                            <NavLink style={isActive => ({
-                                color: isActive ? "white" : "white"
-                            })} to='/Admin/Home' >Quản lý</NavLink>
-                        </div> : <Fragment></Fragment>
+    const handleLogin = React.useCallback(
+        () => {
+            return <div className={`${styles.rs_btn}`} id='rs_btn'>
+                {_.isEmpty(userLogin) ? <div className="items-center  flex-shrink-0  lg:flex">
+                    <button onClick={() => { history.push('/signIn') }} className={`${styles.rs_header} self-center px-6 py-3 rounded hover:bg-violet-600 text-white`}>Đăng Nhập</button>
+                    <button onClick={() => { history.push('/signUp') }} className={`${styles.rs_header} self-center px-6 py-3 font-semibold rounded hover:bg-violet-600 text-white`}>Đăng Kí</button>
+                </div> : <div className="items-center  justify-center flex-shrink-0 hidden lg:flex text-white">
+                    <Dropdown overlay={menu} trigger={['click']}>
+                        <a
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                        className="ant-dropdown-link text-white" onClick={e => e.preventDefault()}>
+                            <span className='mr-3'>{userLogin.userName}</span>
+                            <p
+                            style={{
+                                marginTop: '7px'
+                            }}
+                            ><DownOutlined /></p>
+                        </a>
+                    </Dropdown>
+                    {
+                        userLogin?.typeUser.type !== "CLIENT" ?
+                            <div className='mb-0 ml-3 text-xl flex justify-center items-center'>
+                                <p
+                                    style={{
+                                        marginRight: '5px',
+                                        marginBottom: '5px'
+                                    }}
+                                    className='mb-0'><QqOutlined /></p>
+                                <NavLink style={isActive => ({
+                                    color: isActive ? "white" : "white"
+                                })} to='/Admin/Home' >Quản lý</NavLink>
+                            </div> : <Fragment></Fragment>
+                    }
+                </div>
                 }
             </div>
-
-            }
-        </div>
-    }
+        }, [userLogin])
 
 
     const formik = useFormik({
@@ -67,12 +85,28 @@ export default function Header(props) {
         },
     });
 
+    const handleLoading = React.useCallback(
+        (e) => {
+            if (e.target.value.length == 0) {
+                setIsSearch(false)
+                setLoading(false)
+                setOpen(false)
+                return
+            }
+            setLoading(true)
+            setIsSearch(false)
+            setTimeout(() => {
+                formik.handleSubmit(e)
+                setLoading(false)
+                e.target.value.length > 0 ? setIsSearch(true) : setIsSearch(false)
+            }, 1000);
+        }, [formik.handleSubmit])
+
     return (
         <div style={{
             position: 'fixed',
             zIndex: '10',
         }} className='relative'>
-
 
             <nav className=" border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800 text-coolGray-800 fixed z-10 w-full bg-black bg-opacity-40">
                 <div className="lg:container flex flex-wrap justify-between items-center mx-auto">
@@ -80,15 +114,119 @@ export default function Header(props) {
                         <img src="tix.png" className={`mr-3 h-6 sm:h-9 ${styles.logo}`} alt="Logo" />
                     </NavLink>
 
-                    {/* <div className='w-1/4 ml-2'>
+                    <div className='w-1/4 ml-2'>
                         <form onSubmit={formik.handleSubmit} className='w-full'>
-                            <div className='flex'> */}
+                            <div style={{
+                                position: 'relative',
+                            }} className='flex'>
                                 {/* <Search placeholder="Nhập tên phim" onSearch={onSearch} enterButton /> */}
-                                {/* <input name='tenPhim' onChange={formik.handleChange} className="w-4/5 -ml-10 pl-10 pr-3 py-2 rounded-l-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="Nhập tên phim" />
-                                <button type="submit" className="block text-2xl flex items-center justify-center w-1/5 max-w-xs bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-r-lg font-semibold"><SearchOutlined /></button>
+                                <input value={
+                                    formik.values.tenPhim
+                                }
+                                    style={{
+                                        width: window.innerWidth
+                                    }}
+                                    name='tenPhim'
+                                    onChange={
+                                        (e) => {
+                                            e.target.value.length > 0 ? setIsSearch(true) : setIsSearch(false)
+                                            formik.handleChange(e)
+                                            handleLoading(e)
+                                        }
+                                    } className="pl-4 pr-3 py-2 rounded-full border-2 border-gray-200 outline-none focus:border-gray-500" placeholder="Tìm kiếm" />
+                                {/* model search */}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: -window.innerHeight * 0.03,
+                                    right: window.innerWidth * 0.18 + 1,
+                                }} className='grid grid-cols-5 w-2'>
+                                    <div
+                                        className='col-start-2 ml-6 '>
+                                        {open === true ?
+                                            <div
+                                                style={{
+                                                    position: 'absolute',
+                                                    overflow: 'hidden',
+                                                }}
+                                                className='absolute top-20 z-50 bg-white rounded-md'>
+                                                {lstSearchPhim.length > 0 ?
+                                                    lstSearchPhim.map((item, index) => {
+                                                        return (
+                                                            <div
+                                                                style={{
+                                                                    width: window.innerWidth * 0.17,
+                                                                }}
+                                                                className='py-4 cursor-pointer hover:bg-slate-300 hover:accent-pink-500 pl-5 pr-5 leading-4' key={index}
+                                                                onClick={() => {
+                                                                    history.push(`/DetailsFilm/${item.id}`)
+                                                                    setOpen(false)
+                                                                    formik.setFieldValue('tenPhim', '')
+                                                                    setIsSearch(false)
+                                                                }
+                                                                }
+                                                            >
+                                                                {_.truncate(item.nameFilm, { 'length': 35, 'separator': '' })}
+                                                            </div>
+                                                        )
+                                                    }
+                                                    )
+                                                    :
+                                                    <div style={{
+                                                        width: window.innerWidth * 0.17,
+                                                    }} className='py-4 cursor-pointer hover:bg-slate-300 hover:accent-pink-500 pl-5 pr-5 leading-4'>Không tìm thấy phim</div>}
+                                            </div> : ''}
+                                    </div>
+                                </div>
+                                {
+                                    isSearch ? <div
+                                        onClick={() => {
+                                            setOpen(false)
+                                            //clear input
+                                            formik.setFieldValue('tenPhim', '')
+                                            setIsSearch(false)
+                                        }}
+                                        style={{
+                                            position: 'absolute',
+                                            right: window.innerWidth * 0.03,
+                                            top: window.innerHeight * 0.009,
+                                            cursor: 'pointer',
+                                        }} > <CloseCircleOutlined /></div> : null}
+                                {
+                                    loading ?
+                                        <div
+                                            onClick={() => {
+                                                setOpen(false)
+                                                //clear input
+                                                formik.setFieldValue('tenPhim', '')
+                                                setIsSearch(false)
+                                            }}
+                                            style={{
+                                                position: 'absolute',
+                                                right: window.innerWidth * 0.03,
+                                                top: window.innerHeight * 0.009,
+                                                cursor: 'pointer',
+                                            }} > <LoadingOutlined /></div> : null}
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        right: window.innerWidth * 0.025,
+                                        top: -window.innerHeight * 0.001,
+                                        fontSize: '25px',
+                                        opacity: '0.5',
+                                    }}
+                                ><p>|</p></div>
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        right: window.innerWidth * 0.01,
+                                        top: window.innerHeight * 0.0001,
+                                        cursor: 'pointer',
+                                        fontSize: '20px',
+                                    }}
+                                ><SearchOutlined /></div>
                             </div>
                         </form>
-                    </div> */}
+                    </div>
                     <div>
                         <button onClick={() => {
                             const targetel = document.getElementById('mobile_menu');
@@ -113,10 +251,17 @@ export default function Header(props) {
                     <div className="hidden w-full md:block md:w-auto  lg:flex " id="mobile_menu">
                         <ul className="md:flex justify-center items-center h-full mb-0 mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
                             <li>
-                                <NavLink to='/home' className={`${styles.rs_header} block py-2 pr-4 pl-3  bg-blue-700 rounded md:bg-transparent text-white md:p-0 dark:text-white" aria-current="page" activeClassName='text-yellow-700`} >Trang Chủ</NavLink>
+                                <NavLink to='/home' className={`${styles.rs_header}  block py-2 pr-4 pl-3  bg-blue-700 rounded md:bg-transparent text-white md:p-0 dark:text-white" aria-current="page" activeClassName='text-yellow-700`} ><p style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    margin: 5,
+                                }} >Trang Chủ</p></NavLink>
                             </li>
                             <li>
-                                <NavLink to='/GroupCinema' className={`${styles.rs_header} block py-2 pr-4 pl-3 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 text-white md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" activeClassName='text-blue-700`}>Cụm Rạp</NavLink>
+                                <NavLink to='/GroupCinema' className={`${styles.rs_header} block py-2 pr-4 pl-3 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 text-white md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" activeClassName='text-blue-700`}>
+                                    Cụm Rạp
+                                </NavLink>
                             </li>
                         </ul>
 
@@ -124,29 +269,7 @@ export default function Header(props) {
                     {handleLogin()}
                 </div>
             </nav>
-            <div style={{
-                position: 'absolute',
-                top: 0,
-                left: window.innerWidth * 0.22,
-            }} className='grid grid-cols-5'>
-                <div className='col-start-2 ml-6 '>
-                    {open === true ? <div className='absolute top-20 z-50 bg-black rounded-md'>
-                        {lstSearchPhim.length > 0 ?
-                            lstSearchPhim.map((item, index) => {
-                                return (
-                                    <div className='w-56 my-4 ml-10 cursor-pointer text-white hover:text-yellow-400 hover:accent-pink-500' key={index}
-                                        onClick={() => { history.push(`/DetailsFilm/${item.id}`) }}
-                                    >
-                                        {item.nameFilm}
-                                    </div>
-                                )
-                            }
-                            ) : <div className='w-56 my-4 ml-10 cursor-pointer text-yellow-400 font-bold'>Không tìm thấy phim</div>}
-                    </div> : ''}
-                </div>
-            </div>
-
-        </div>
+        </div >
 
     )
 }

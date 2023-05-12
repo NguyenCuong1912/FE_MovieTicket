@@ -16,18 +16,18 @@ export default function Film(props) {
             <div className="flex flex-col  h-full mx-2 p-2 rounded-md shadow-md ">
                 <div
                     style={{
-                        backgroundImage: `url(${DOMAIN_STATIC_FILE}${phim.imgFilm})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat',
+                        backgroundImage: `url(${DOMAIN_STATIC_FILE}${phim.imgFilm})`, backgroundPosition: 'center', backgroundSize: 'fill', backgroundRepeat: 'no-repeat',
                         position: 'relative',
                     }}
                 >
                     <img src={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`}
-                        className="opacity-0 w-full" style={{ height: '40vh', }} alt={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`}
+                        className="opacity-0 w-full" style={{
+                            height: '40vh',
+                            width: '40vh',
+                            objectFit: 'fill',
+                        }} alt={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`}
                     />
-                    <div>
-                        <button className='w-full playVideo ' style={{ top: 0, height: '40vh', position: 'absolute', backgroundColor: 'rgba(0,0,0,.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <div className=' rounded-full cursor-pointer'>
-                            </div>
-                            <div onClick={() => {
+                    <div  onClick={() => {
                                 dispatch({
                                     type: OPEN_MODAL_TRAILER,
                                     data: {
@@ -35,12 +35,25 @@ export default function Film(props) {
                                         tenPhim: phim.nameFilm
                                     }
                                 })
-                            }} >
+                            }}>
+                        <button className='w-full playVideo ' style={{ top: 40, height: '32vh', position: 'absolute', backgroundColor: 'rgba(0,0,0,.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <div className=' rounded-full cursor-pointer'>
+                            </div>
+                            <div >
                                 <PlayCircleOutlined style={{ fontSize: '50px', color: '#fff', opacity: 0.5 }} />
                             </div>
                         </button>
                     </div>
                 </div>
+                <div
+                style={{
+                    cursor: 'pointer',
+                }}
+                onClick={
+                () => {
+                    history.push(`/DetailsFilm/${phim.id}`)
+                }
+            }>
                 <div className="mt-6 mb-2">
                     <h2 className="text-xl h-16 font-semibold tracking-wide">
                         {phim.nameFilm}
@@ -51,14 +64,11 @@ export default function Film(props) {
                 </p>
 
             </div>
-            <div onClick={
-                () => {
-                    history.push(`/DetailsFilm/${phim.id}`)
-                }
-            } className='child flex justify-center alignItems-center'>
+            <div  className='child flex justify-center alignItems-center'>
                 <button className="px-10 py-2 text-xl  rounded bg-red-500 text-white">
                     <NavLink className='text-white' activeStyle={{ color: "white" }} to={`/DetailsFilm/${phim.id}`} >Đặt vé</NavLink>
                 </button>
+            </div>
             </div>
         </div>
     )

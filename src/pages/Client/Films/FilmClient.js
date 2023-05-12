@@ -5,7 +5,6 @@ import { layDanhSachPhimAction } from '../../../redux/Actions/QuanLyPhimAction';
 export default function FilmClient(props) {
     const { lstPhim } = useSelector(state => state.QuanLyPhimReducer)
     const dispatch = useDispatch();
-    console.log(lstPhim)
     useEffect(() => {
         dispatch(layDanhSachPhimAction())
     }, [])

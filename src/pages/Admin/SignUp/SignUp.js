@@ -31,7 +31,7 @@ export default function SignUp() {
                 .required("Không được trống !"),
         }),
         onSubmit: values => {
-            dispatch(signUp(values, 1))
+            dispatch(signUp(values, 2))
         },
     });
     return (

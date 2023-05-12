@@ -7,7 +7,7 @@ export const themSeatsAction = (dataCreate) => {
             console.log("sett", dataCreate)
             const result = await quanLySeatsServices.themSeats(dataCreate);
             if (result.status === 201) {
-                console.log("seats", result.data)
+                // console.log("seats", result.data)
             }
         } catch (error) {
             console.log(error)

@@ -20,6 +20,7 @@ function Checkout(props) {
     const { phongVe, listGheDangDat } = useSelector(state => state.QuanLySeatsReducer);
     const { userLogin } = useSelector(state => state.QuanLyNguoiDungReducer);
     const { lstGhe, film } = phongVe;
+    const phong = useSelector(state => state.QuanLyPhongReducer);
     const [state, setState] = useState('00:00:00');
     useEffect(() => {
         dispatch(layDanhSachGheTheoLichChieu(props.match.params.id));
@@ -53,6 +54,8 @@ function Checkout(props) {
             </Fragment>
         })
     }
+    console.log('phong', phong);
+    console.log('phongVe',phongVe);
     return (
         <div className='grid grid-cols-12 h-screen'>
             <div className='container pt-5 col-span-9'>
@@ -186,7 +189,6 @@ function KetQuaDatVe(props) {
     const dispatch = useDispatch();
     const { userLogin } = useSelector(state => state.QuanLyNguoiDungReducer);
     const { lstTicketWithUser } = useSelector(state => state.QuanLyTicketReducer);
-    console.log("lst", lstTicketWithUser)
     useEffect(() => {
         dispatch(danhSachVeTheoUserAction(userLogin.id))
     }, [])
@@ -197,7 +199,7 @@ function KetQuaDatVe(props) {
                     <img className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src={`${DOMAIN_STATIC_FILE}${ticket.imgFilm}`} alt={ticket.imgFilm} />
                     <div className="flex-grow">
                         <h2 className="text-gray-900 title-font font-medium">{ticket.nameFilm}</h2>
-                        <p className="text-gray-500">{ticket.groupName} - {ticket.cinemaName}</p>
+                        <p className="text-gray-500">{ticket.groupName} - {ticket.cinemaName} - {ticket.roomName}</p>
                         <p className="text-gray-500">Ngày Chiếu: {moment(ticket.showDate).format("DD/MM/YYYY hh:mm A")}</p>
                         <p className="text-gray-500">Ngày đặt: {moment(ticket.lstTicket[0].createdAt).format(" DD/MM/YYYY ")}</p>
                         <p className="text-gray-500 text-base">Ghế : {ticket.lstTicket.map((soGhe, index) => {

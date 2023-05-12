@@ -10,6 +10,10 @@ import '../../../components/CircleRating/CircleRating.css';
 import { lichChieuTheoHeThongRap } from '../../../redux/Actions/QuanLyLichChieuAction';
 import { DOMAIN_STATIC_FILE } from '../../../utils/Settings/config';
 import { layChiTietPhimAction } from './../../../redux/Actions/QuanLyPhimAction';
+import ModalTrailer from '../../../components/Modal/ModalTrailer';
+import { OPEN_MODAL_TRAILER } from '../../../redux/Types/ModalType';
+import ReactPlayer from 'react-player';
+import GoogleMap from '../../../components/GoogleMap/GoogleMap';
 export default function DetailsFilm(props) {
     const dispatch = useDispatch();
     const { phimEdit } = useSelector(state => state.QuanLyPhimReducer);
@@ -18,13 +22,58 @@ export default function DetailsFilm(props) {
     useEffect(() => {
         dispatch(layChiTietPhimAction(id));
         dispatch(lichChieuTheoHeThongRap(id))
-    }, [])
+    }, [id])
+
+    console.log('showTime', showTime);
+
     const { TabPane } = Tabs;
 
     const renderContact = () => {
         return <view>
             <p>Bạn muốn nhắn nhủ gì tới chúng tôi ?</p>
         </view>
+    }
+
+    const renderDescription = () => {
+        return (
+            <view
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <p style={{
+                    width: '80%',
+                    fontSize: '1.2rem',
+                    fontWeight: 'bold',
+                    lineHeight: '1.5',
+                }}
+                >{phimEdit.description}
+                    {/* <ModalTrailer /> */}
+                    <div
+                        onClick={() => {
+                            dispatch({
+                                type: OPEN_MODAL_TRAILER,
+                                data: {
+                                    trailer: phimEdit.trailer,
+                                    tenPhim: phimEdit.nameFilm
+                                }
+                            })
+                        }}
+                    >
+                        <div
+                            style={{
+                                marginTop: '20px',
+                            }}
+                        > <ReactPlayer controls stopOnUnmount={false} pip width='100%' height={window.innerHeight * 0.7} url={phimEdit?.trailer} /></div>
+                    </div>
+                    {/* <div
+                    ><GoogleMap /></div> */}
+                </p>
+            </view >
+        )
     }
 
     return (
@@ -39,10 +88,12 @@ export default function DetailsFilm(props) {
                 <div className='grid grid-cols-12'>
                     <div className='col-span-5 col-start-3'>
                         <div className='grid grid-cols-3'>
-                            <img style={{ width: '100%', height: 250, objectFit: 'cover' }} src={`${DOMAIN_STATIC_FILE}${phimEdit.imgFilm}`} alt={`${phimEdit.imgFilm}`} />
+                            <img style={{ width: '100%', height: 250, objectFit: 'fill', borderRadius: '10px' }} src={`${DOMAIN_STATIC_FILE}${phimEdit.imgFilm}`} alt={`${phimEdit.imgFilm}`} />
                             <div className='flex flex-col  justify-center ml-5 col-span-2'>
                                 <p className='text-2xl font-bold'>{phimEdit.nameFilm}</p>
-                                <p>{phimEdit.description}</p>
+                                <p>
+                                    {_.truncate(phimEdit.description, { 'length': 100, 'separator': '' })}
+                                </p>
                                 <p>{moment(phimEdit.showtime).format('DD-MM-YYYY hh:mm')}</p>
                             </div>
                         </div>
@@ -105,13 +156,14 @@ export default function DetailsFilm(props) {
 
                                 </Tabs>
                             </TabPane>
-                            <TabPane tab="Chi tiết" key="2">
-                                Chi tiết
+                            <TabPane
+                                tab="Chi tiết" key="2">
+                                {
+                                    renderDescription()
+                                }
                             </TabPane>
                             <TabPane tab="Liên hệ" key="3">
-                                {
-                                    renderContact()
-                                }
+                                Bạn muốn nhắn nhủ gì tới chúng tôi ?
                             </TabPane>
                         </Tabs>
 

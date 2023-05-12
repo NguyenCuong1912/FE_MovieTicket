@@ -43,7 +43,7 @@ export default function Footer() {
                                 <p className='text-white mb-1'>Hotline: 19001900</p>
                             </li>
                             <li>
-                                <p className='text-white mb-1'>Giò làm việc : 8:00 - 22:00 hàng ngày</p>
+                                <p className='text-white mb-1'>Giờ làm việc : 8:00 - 22:00 hàng ngày</p>
                             </li>
                             <li>
                                 <p className='text-white mb-1'>Email hỗ trợ : hoidap@tix.com</p>
