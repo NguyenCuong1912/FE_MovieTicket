@@ -48,7 +48,7 @@ const socket = io.connect(`${DOMAIN_STATIC_FILE}`);
 export const history = createBrowserHistory();
 export default function App() {
 
-  useEffect(() => {
+  React.useEffect(() => {
     window.addEventListener('error', e => {
       if (e.message === 'ResizeObserver loop limit exceeded') {
         const resizeObserverErrDiv = document.getElementById(
