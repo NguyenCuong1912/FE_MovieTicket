@@ -1,0 +1,2 @@
+export const SET_BANNER = "SET_BANNER";
+export const SET_DETAIL_BANNER = "SET_DETAIL_BANNER";

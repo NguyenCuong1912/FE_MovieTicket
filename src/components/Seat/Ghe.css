@@ -1,28 +1,31 @@
 .ghe {
-    width: 25px;
-    height: 25px;
-    margin: 8px 13px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    color: white;
-    background-color: rgba(78, 75, 75, 0.199);
-  }
-  .gheVip {
-    background-color: rgba(231, 172, 62, 0.726);
-  }
-  .gheDaDat {
-    background-color: rgb(201, 29, 29);
-    cursor: no-drop;
-  }
-  .gheDangDat {
-    background-color: rgb(36, 202, 36) !important;
-  }
-  .gheBanDat {
-    background-color: white;
-    border: 1px solid #03a9f4;
-    filter: drop-shadow(9px -9px 5px rgba(227, 214, 214, 0.65));
-    -webkit-filter: drop-shadow(9px -9px 5px rgba(227, 214, 214, 0.65));
-    -moz-filter: drop-shadow(9px -9px 5px rgba(227, 214, 214, 0.65));
-  }
-  
+  width: 25px;
+  height: 25px;
+  margin: 8px 5px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  color: white;
+  background-color: rgba(78, 75, 75, 0.199);
+}
+.gheVip {
+  background-color: rgba(231, 172, 62, 0.726);
+}
+.gheDaDat {
+  background-color: rgb(201, 29, 29) !important;
+  cursor: no-drop;
+}
+.gheBanDangDat {
+  background-color: rgb(36, 202, 36) !important;
+}
+.gheNguoiKhacDat {
+  background-color: rgb(36, 72, 202) !important ;
+  cursor:  no-drop;
+}
+.gheBanDat {
+  background-color: white;
+  border: 1px solid #03a9f4;
+  filter: drop-shadow(9px -9px 5px rgba(227, 214, 214, 0.65));
+  -webkit-filter: drop-shadow(9px -9px 5px rgba(227, 214, 214, 0.65));
+  -moz-filter: drop-shadow(9px -9px 5px rgba(227, 214, 214, 0.65));
+}

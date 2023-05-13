@@ -44,6 +44,9 @@ import Checkout_Error from "./components/Success_Error/Checkout_Error";
 import Loading from "./components/Loading/Loading";
 import io from "socket.io-client";
 import { DOMAIN_STATIC_FILE } from "./utils/Settings/config";
+import Banner from "./pages/Admin/Banner";
+import CreateBanner from "./pages/Admin/Banner/Create";
+import EditBanner from "./pages/Admin/Banner/Edit";
 const socket = io.connect(`${DOMAIN_STATIC_FILE}`);
 export const history = createBrowserHistory();
 export default function App() {
@@ -115,8 +118,14 @@ export default function App() {
           exact
           Component={TypeUserEdit}
         />
+        {/* //! Banner */}
+        <Template path="/Admin/Banners" exact Component={Banner} />
+        <Template path="/Admin/Banners/Create" exact Component={CreateBanner} />
+        <Template path="/Admin/Banners/Edit/:id" exact Component={EditBanner} />
+        {/* Ticket */}
         <Template path="/Admin/Tickets/:id" exact Component={Ticket} />
 
+        {/* //! */}
         <UserTemplate path="/DetailsFilm/:id" exact Component={DetailsFilm} />
         <UserTemplate path="/Home" exact Component={HomeClient} />
         <UserTemplate path="/Profile" exact Component={Profile} />
