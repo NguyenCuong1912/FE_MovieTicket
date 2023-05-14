@@ -2,10 +2,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "../Checkout/Checkout.module.css";
 import "../Checkout/Checkout.css";
-import { Tooltip, Modal, message } from "antd";
+import { Tooltip, Modal } from "antd";
 import {
-  CloseOutlined,
-  UserOutlined,
   ArrowLeftOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
@@ -13,7 +11,7 @@ import _ from "lodash";
 import moment from "moment";
 import { history } from "../../../App";
 import { layDanhSachGheTheoLichChieu } from "../../../redux/Actions/QuanLySeatsAction";
-import { DOMAIN, DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
+import { DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
 import {
   CHON_GHE,
   CLEAR_VE_DANG_CHON,
@@ -21,27 +19,31 @@ import {
 
 import Countdown from "react-countdown";
 import { RequirementCheckoutAction } from "../../../redux/Actions/QuanLyCheckoutAction";
-import axios from "axios";
 import io from "socket.io-client";
+import { chiTietLichChieuAction } from "../../../redux/Actions/QuanLyLichChieuAction";
+import RoomSizeM from "../../../components/Room/SizeM";
+import RoomSizeL from "../../../components/Room/SizeL";
+import RoomSizeS from "../../../components/Room/SizeS";
 
 const { confirm } = Modal;
 export default function Checkout(props) {
   const socket = io.connect(`${DOMAIN_STATIC_FILE}`);
-  // const { id } = props.match.params;
+  const { id } = props.match.params;
 
   const dispatch = useDispatch();
   //! State
   const { phongVe, listGheDangDat } = useSelector(
     (state) => state.QuanLySeatsReducer
   );
+  const { showTimeEdit } = useSelector((state) => state.QuanLyLichChieuReducer);
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
   const { lstGhe, film } = phongVe;
   const [state, setState] = useState("00:00:00");
-
   useEffect(() => {
     const data = { room: props.match.params.id, user: userLogin };
     socket.emit("join-room", data);
     dispatch(layDanhSachGheTheoLichChieu(props.match.params.id, userLogin));
+    dispatch(chiTietLichChieuAction(id));
     dispatch({
       type: CLEAR_VE_DANG_CHON,
     });
@@ -49,7 +51,12 @@ export default function Checkout(props) {
     setState(Date.now() + 10 * 60 * 1000);
     //!
   }, []);
-
+  useEffect(() => {
+    socket.on("receive-order-seat", (data) => {
+      dispatch(layDanhSachGheTheoLichChieu(props.match.params.id, userLogin));
+    });
+  }, [socket]);
+  //! Function
   const data = {
     user: userLogin,
     room: props.match.params.id,
@@ -70,14 +77,6 @@ export default function Checkout(props) {
       onCancel() { },
     });
   };
-
-  useEffect(() => {
-    socket.on("receive-order-seat", (data) => {
-      dispatch(layDanhSachGheTheoLichChieu(props.match.params.id, userLogin));
-    });
-  }, [socket]);
-
-  //! Function
   const handleSocket = (userLogin, idShowtime, ghe) => {
     const data = {
       user: userLogin,
@@ -90,102 +89,50 @@ export default function Checkout(props) {
       gheDuocChon: ghe,
     });
   };
-
+  const handleChoiceSeat = (preSeat, currentSeat, nextSeat) => {
+    console.log("pre", preSeat);
+    console.log("current", currentSeat);
+    console.log("next", nextSeat);
+  };
+  const size = "M";
   const renderListGhe = () => {
-    console.log(lstGhe, "lstghe");
-    return lstGhe?.map((ghe, index) => {
-      let classGheDaDat = ghe.bookded ? "gheDaDat" : "";
-      let classGheBanDat = "";
-      let classGheDangDat = "";
-      //! seat you booked
-      ghe.idUser === userLogin?.id
-        ? (classGheBanDat = "gheBanDat")
-        : (classGheBanDat = "");
-      //! keepSeat
-      if (!!ghe.keepSeat) {
-        classGheDangDat =
-          parseInt(ghe.keepSeat) === userLogin.id
-            ? "gheBanDangDat"
-            : "gheNguoiKhacDat";
-      }
+    if (size === "M") {
       return (
-        <Fragment key={index}>
-          <button
-            onClick={() => {
-              handleSocket(userLogin, props.match.params.id, ghe);
-            }}
-            disabled={ghe.bookded || classGheDangDat === "gheNguoiKhacDat"}
-            className={`ghe ${classGheDaDat}
-                  ${classGheDangDat} ${classGheBanDat}  text-center`}
-          >
-            {ghe.bookded ? (
-              ghe.idUser === userLogin?.id ? (
-                <UserOutlined style={{ marginBottom: 10, color: "#03a9f4" }} />
-              ) : (
-                <CloseOutlined style={{ marginBottom: 10 }} />
-              )
-            ) : (
-              ghe.seatName
-            )}
-          </button>
-          {/* for 6 8 6 */}
-          {/* {(index + 1) % 20 === 0 ? <br /> : ""} */}
-
-          {/* for 4 8 4 and 2 12 2 */}
-          {(index + 1) % 16 === 0 ? <br /> : ""}
-
-          {/* 6 8 6 */}
-          {/* {
-            (index + 3) % 4 === 0 && !['8', '2', '0'].includes((index + 1).toString().slice(-1)) // check if index is divisible by 4
-              &&
-              (index + 1) % 20 !== 0 // check if index is divisible by 20
-              ?
-              (
-                <Fragment>
-                  <span className="mr-7"></span>
-                </Fragment>
-              ) : (
-                ""
-              )
-          } */}
-          {/* 4 8 4 */}
-          {/* {
-              (index + 1) % 4 === 0
-                &&
-                (index + 1) % 16 !== 0
-                &&
-                (index + 1) % 8 !== 0
-                ?
-                (
-                  <Fragment>
-                    <span className="mr-5"></span>
-                  </Fragment>
-                ) : (
-                  ""
-                )
-            } */}
-          {/* 2 12 2 */}
-          {
-            (index + 1) % 2 === 0 &&
-              (index + 1) % 16 !== 0 &&
-              (index + 1) % 8 !== 0 &&
-              (index + 1) % 4 !== 0 &&
-              !((index + 6) % 16 === 0 || (index + 10) % 16 === 0) &&
-              !((index - 2) % 16 === 0 || (index + 2) % 16 === 0) &&
-              ((index + 1) % 16 !== 6 && (index + 1) % 16 !== 10) &&
-              ((index + 1) % 16 !== 22 && (index + 1) % 16 !== 26)
-              ?
-              (
-                <Fragment>
-                  <span className="mr-5"></span>
-                </Fragment>
-              ) : (
-                ""
-              )
-          }
-        </Fragment>
+        <RoomSizeM
+          seat_of_row={16}
+          lstGhe={lstGhe}
+          userLogin={userLogin}
+          handleSocket={handleSocket}
+          // handleChoiceSeat={handleChoiceSeat}
+          idShowtime={id}
+          preSeat
+          currentSeat
+          nextSeat
+        />
       );
-    });
+    }
+    if (size === "L") {
+      return (
+        <RoomSizeL
+          seat_of_row={20}
+          lstGhe={lstGhe}
+          userLogin={userLogin}
+          handleSocket={handleSocket}
+          idShowtime={id}
+        />
+      );
+    }
+    if (size === "S") {
+      return (
+        <RoomSizeS
+          seat_of_row={16}
+          lstGhe={lstGhe}
+          userLogin={userLogin}
+          handleSocket={handleSocket}
+          idShowtime={id}
+        />
+      );
+    }
   };
   return (
     <div className="grid grid-cols-12 h-screen">
@@ -216,7 +163,8 @@ export default function Checkout(props) {
 
             <div className="ml-3">
               <h3 className="mb-0">
-                {film.groupName} - Rạp: {film.rapChieu}
+                {film.groupName} - Rạp {film.rapChieu} - Phòng { }
+                {showTimeEdit?.room?.roomName}
               </h3>
               <p className="mb-0 text-gray-500 font-bold opacity-50">
                 -{moment(film.showDate).format("DD/MM/YYYY hh:mm A")}{" "}
@@ -245,8 +193,8 @@ export default function Checkout(props) {
         </div>
         <div>
           <div className="h-2 w-full bg-black mt-3 opacity-80"></div>
-          <div id={style.trapezoid}>
-            <h4 className="pt-1 text-center text-black">Màn hình</h4>
+          <div className="mb-12" id={style.trapezoid}>
+            <h4 className="pt-1 text-center text-black">Screen</h4>
           </div>
           <div className="text-center">{renderListGhe()}</div>
         </div>
@@ -294,9 +242,11 @@ export default function Checkout(props) {
           <div className="my-3">
             <h3>{film.nameFilm}</h3>
             <p className="mb-1">
-              {film.groupName} - {film.rapChieu}
+              Rạp : {film.groupName} - {film.rapChieu}
             </p>
-            <p className="mb-0">
+            <p>Phòng : {showTimeEdit?.room?.roomName}</p>
+            <p className="mb-1">
+              Thời gian chiếu:{" "}
               {moment(film.showDate).format("DD/MM/YYYY hh:mm A")}
             </p>
           </div>

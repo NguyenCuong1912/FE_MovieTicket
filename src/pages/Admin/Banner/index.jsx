@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-pascal-case */
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Input, Popconfirm } from "antd";
@@ -7,6 +6,8 @@ import {
   EditOutlined,
   DeleteOutlined,
   LockOutlined,
+  EyeOutlined,
+  EyeInvisibleOutlined,
   UnlockOutlined,
 } from "@ant-design/icons";
 import {
@@ -17,8 +18,15 @@ import {
 import { NavLink } from "react-router-dom";
 import { history } from "../../../App";
 import Export_Excel from "./../../../components/Excel/Export_Excel";
-export default function User(props) {
+import {
+  DeleteBannerAction,
+  GetBannerAction,
+} from "../../../redux/Actions/BannerAction";
+import { DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
+export default function Banner(props) {
   const { listUser } = useSelector((state) => state.QuanLyNguoiDungReducer);
+  const { lstBanner } = useSelector((state) => state.BannerReducer);
+  console.log("lst", lstBanner);
   const confirm = (id, status) => {
     if (status === "Unlock") {
       dispatch(lockAndUnLockAction(id, { isBlock: 0 }));
@@ -28,6 +36,7 @@ export default function User(props) {
   };
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(GetBannerAction());
     dispatch(layDanhSachnguoiDungAction());
   }, []);
   const columns = [
@@ -39,45 +48,51 @@ export default function User(props) {
       width: "10%",
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      width: "20%",
-    },
-    {
-      title: "Tên",
-      dataIndex: "userName",
-      width: "20%",
-    },
-    {
-      title: "Số Điện Thoại",
-      dataIndex: "phoneNumber",
-      width: "15%",
-    },
-    {
-      title: "Quyền",
-      dataIndex: "typeUser",
-      render: (text, user) => {
-        return <p>{user.type_user.type}</p>;
+      title: "Banner",
+      dataIndex: "image",
+      render: (text, banner) => {
+        return (
+          <div
+            style={{
+              width: 100,
+              height: 100,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundImage: `url(${DOMAIN_STATIC_FILE}${banner.image})`,
+            }}
+          >
+            <img
+              style={{ width: 100, height: 100, opacity: 0 }}
+              src={`${DOMAIN_STATIC_FILE}${banner.image}`}
+              alt={banner.image}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src = `https://picsum.photos/id/200/300`;
+              }}
+            />
+          </div>
+        );
       },
-      width: "10%",
+      width: "15%",
+      key: "logo",
     },
     {
-      title: "Trạng Thái",
-      dataIndex: "isBlock",
-      render: (text, user) => {
-        if (user.isBlock) {
+      title: "Hidden/Display",
+      dataIndex: "isActive",
+      render: (text, banner) => {
+        if (banner.isActive) {
           return (
             <Popconfirm
               placement="top"
-              title="Bạn có muốn mở khóa tài khoản này ?"
+              title="Bạn có muốn cho banner này ẩn ?"
               onConfirm={() => {
-                confirm(user.id, "Unlock");
+                confirm(banner.id, "Unlock");
               }}
               okText="Yes"
               cancelText="No"
             >
               <div className="hover:text-green-500 cursor-pointer">
-                <LockOutlined style={{ fontSize: 20 }} />
+                <EyeOutlined style={{ fontSize: 20 }} />
               </div>
             </Popconfirm>
           );
@@ -85,15 +100,15 @@ export default function User(props) {
           return (
             <Popconfirm
               placement="top"
-              title="Bạn có muốn  khóa tài khoản này ?"
+              title="Bạn có muốn hiện thị banner này ?"
               onConfirm={() => {
-                confirm(user.id, "lock");
+                confirm(banner.id, "lock");
               }}
               okText="Yes"
               cancelText="No"
             >
               <div className="hover:text-yellow-400 cursor-pointer">
-                <UnlockOutlined style={{ fontSize: 20 }} />
+                <EyeInvisibleOutlined style={{ fontSize: 20 }} />
               </div>
             </Popconfirm>
           );
@@ -105,19 +120,19 @@ export default function User(props) {
       title: "",
       dataIndex: "id",
       width: "15%",
-      render: (text, user) => {
+      render: (text, banner) => {
         return (
           <div className="flex justify-around items-center text-lg">
             <NavLink
               className="hover:text-2xl hover:text-blue-400 text-black"
-              to={`/Admin/Users/Edit/${user.id}`}
+              to={`/Admin/Banners/Edit/${banner.id}`}
             >
               <EditOutlined key={1} className="cursor-pointer" />
             </NavLink>
             <div
               onClick={() => {
-                if (window.confirm("Bạn có muốn xóa người dùng ? ")) {
-                  dispatch(xoaNguoiDungAction(user.id));
+                if (window.confirm("Bạn có muốn xóa banner này ? ")) {
+                  dispatch(DeleteBannerAction(banner.id));
                 }
               }}
               className="hover:text-2xl hover:text-red-400 text-black"
@@ -129,60 +144,23 @@ export default function User(props) {
       },
     },
   ];
-  const onSearch = (value) => {
-    dispatch(layDanhSachnguoiDungAction(value));
-  };
-  const { Search } = Input;
-  const dataExport = listUser.map((user) => {
-    if (user.isActive) {
-      return {
-        Tên: user.userName,
-        Email: user.email,
-        Phone: user.phoneNumber,
-        Trạng_Thái: user.isBlock === true ? "Khóa" : "Hoạt Động",
-        Loại_Tai_Khoản: user.type_user.nameType,
-      };
-    }
-  });
+
   return (
     <Fragment>
-      <h2 className="text-center my-4 text-2xl">QUẢN LÝ TÀI KHOẢN</h2>
+      <h2 className="text-center my-4 text-2xl">QUẢN LÝ TÀI BANNER</h2>
       <div className="mx-10 mb-5 flex justify-between">
         <button
           onClick={() => {
-            history.push("/Admin/Users/Create");
+            history.push("/Admin/Banners/Create");
           }}
           className="text-white bg-sky-500 flex items-center justify-center px-3 py-2"
         >
           <PlusOutlined />
-          Thêm Tài Khoản
+          Thêm Banner
         </button>
-
-        <Export_Excel csvData={dataExport} fileName={"user"} />
-      </div>
-      <div className="mx-36 my-3">
-        <Search
-          placeholder="Nhập tên người dùng"
-          onSearch={onSearch}
-          enterButton
-        />
       </div>
       <div className="mx-10">
-        <p className="text-red-500 mx-5">
-          * Nhấn 2 lần vào tên người dùng để xem lịch sử đặt vé
-        </p>
-        <Table
-          onRow={(record, rowIndex) => {
-            return {
-              onDoubleClick: (event) => {
-                history.push(`/Admin/Tickets/${record.id}`);
-              }, // double click row
-            };
-          }}
-          columns={columns}
-          dataSource={listUser}
-          rowKey="id"
-        />
+        <Table columns={columns} dataSource={lstBanner} rowKey="id" />
       </div>
     </Fragment>
   );

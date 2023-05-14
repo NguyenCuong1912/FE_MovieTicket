@@ -1,43 +1,40 @@
-import React, { Fragment, useEffect, useState } from "react";
-import {
-  CloseOutlined,
-  UserOutlined,
-  ArrowRightOutlined,
-} from "@ant-design/icons";
+import React from "react";
+import { CloseOutlined, UserOutlined } from "@ant-design/icons";
 import "./Ghe.css";
 export default function Seat(props) {
-  const { ghe, userLogin, socket } = props;
-  const [classGheDaDat, setClassGheDaDat] = useState("");
-  const [classGheDangDat, setClassGheDangDat] = useState("");
-  const [classGheBanDat, setClassGheBanDat] = useState("");
-  useEffect(() => {
-    //   socket.on("receive-order-seat", (data) => {
-    //     if (data.user.id === userLogin?.id) {
-    //       console.log("a");
-    //     }
-    //     console.log("hello", data);
-    socket.on("receive-order-seat", (data) => {
-      console.log("check", data);
-      setClassGheDangDat("classGheDangDat");
-    });
-  }, [socket]);
+  const {
+    ghe,
+    userLogin,
+    classGheBanDat,
+    classGheDangDat,
+    classGheDaDat,
+    handleSocket,
+    handleChoiceSeat,
+    idShowtime,
+    preSeat,
+    currentSeat,
+    nextSeat,
+  } = props;
+
   return (
-    <Fragment>
-      <button
-        disabled={ghe.bookded}
-        className={`ghe ${classGheDaDat}
+    <button
+      onClick={() => {
+        handleSocket(userLogin, idShowtime, ghe);
+        // handleChoiceSeat(preSeat, currentSeat, nextSeat);
+      }}
+      disabled={ghe.bookded || classGheDangDat === "gheNguoiKhacDat"}
+      className={`ghe ${classGheDaDat}
                 ${classGheDangDat} ${classGheBanDat}  text-center`}
-      >
-        {ghe.bookded ? (
-          ghe.idUser === userLogin?.id ? (
-            <UserOutlined style={{ marginBottom: 10, color: "#03a9f4" }} />
-          ) : (
-            <CloseOutlined style={{ marginBottom: 10 }} />
-          )
+    >
+      {ghe.bookded ? (
+        ghe.idUser === userLogin?.id ? (
+          <UserOutlined style={{ marginBottom: 10, color: "#03a9f4" }} />
         ) : (
-          ghe.seatName
-        )}
-      </button>
-    </Fragment>
+          <CloseOutlined style={{ marginBottom: 10 }} />
+        )
+      ) : (
+        ghe.seatName
+      )}
+    </button>
   );
 }
