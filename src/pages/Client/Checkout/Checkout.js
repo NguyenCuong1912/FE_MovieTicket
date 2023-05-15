@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "../Checkout/Checkout.module.css";
 import "../Checkout/Checkout.css";
@@ -24,12 +24,13 @@ import { chiTietLichChieuAction } from "../../../redux/Actions/QuanLyLichChieuAc
 import RoomSizeM from "../../../components/Room/SizeM";
 import RoomSizeL from "../../../components/Room/SizeL";
 import RoomSizeS from "../../../components/Room/SizeS";
+import { sizeConst } from "../../../constants/roomSize";
+import RoomNoraml from "../../../components/Room/Normal";
 
 const { confirm } = Modal;
 export default function Checkout(props) {
   const socket = io.connect(`${DOMAIN_STATIC_FILE}`);
   const { id } = props.match.params;
-
   const dispatch = useDispatch();
   //! State
   const { phongVe, listGheDangDat } = useSelector(
@@ -39,6 +40,7 @@ export default function Checkout(props) {
   const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
   const { lstGhe, film } = phongVe;
   const [state, setState] = useState("00:00:00");
+
   useEffect(() => {
     const data = { room: props.match.params.id, user: userLogin };
     socket.emit("join-room", data);
@@ -94,9 +96,8 @@ export default function Checkout(props) {
     console.log("current", currentSeat);
     console.log("next", nextSeat);
   };
-  const size = "M";
   const renderListGhe = () => {
-    if (size === "M") {
+    if (showTimeEdit?.room.size === "M") {
       return (
         <RoomSizeM
           seat_of_row={16}
@@ -111,7 +112,7 @@ export default function Checkout(props) {
         />
       );
     }
-    if (size === "L") {
+    if (showTimeEdit?.room.size === "L") {
       return (
         <RoomSizeL
           seat_of_row={20}
@@ -122,9 +123,20 @@ export default function Checkout(props) {
         />
       );
     }
-    if (size === "S") {
+    if (showTimeEdit?.room.size === "S") {
       return (
         <RoomSizeS
+          seat_of_row={16}
+          lstGhe={lstGhe}
+          userLogin={userLogin}
+          handleSocket={handleSocket}
+          idShowtime={id}
+        />
+      );
+    }
+    if (!sizeConst.includes(showTimeEdit?.room.size)) {
+      return (
+        <RoomNoraml
           seat_of_row={16}
           lstGhe={lstGhe}
           userLogin={userLogin}

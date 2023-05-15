@@ -76,3 +76,18 @@ export const UpdateBannerAction = (id, data) => {
     }
   };
 };
+
+export const ChangeStatusBannerAction = (id, isActive) => {
+  return async (dispatch) => {
+    try {
+      const result = await bannerServices.changeStatus(id, isActive);
+      if (result.status === 200) {
+        message.success("Thay đổi thành công");
+        dispatch(GetBannerAction());
+      }
+    } catch (error) {
+      message.error("Thay đổi thất bại");
+      console.log(error);
+    }
+  };
+};

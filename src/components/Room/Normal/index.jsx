@@ -1,23 +1,15 @@
 import React, { Fragment } from "react";
 import Seat from "../../Seat";
 
-export default function RoomSizeM(props) {
+export default function RoomNoraml(props) {
   const {
     lstGhe,
     userLogin,
     handleSocket,
     idShowtime,
     seat_of_row,
-    preSeat,
-    currentSeat,
-    nextSeat,
     className,
   } = props;
-  const handleChoiceSeat = (preSeat, currentSeat, nextSeat) => {
-    console.log("pre", preSeat);
-    console.log("current", currentSeat);
-    console.log("next", nextSeat);
-  };
   return (
     <div>
       {lstGhe?.map((ghe, index) => {
@@ -44,21 +36,11 @@ export default function RoomSizeM(props) {
               classGheBanDat={classGheBanDat}
               classGheDangDat={classGheDangDat}
               handleSocket={handleSocket}
-              // handleChoiceSeat={handleChoiceSeat}
               idShowtime={idShowtime}
               className={className}
             />
 
             {(index + 1) % seat_of_row === 0 ? <br /> : ""}
-            {(index + 1) % 4 === 0 &&
-            (index + 1) % 16 !== 0 &&
-            (index + 1) % 8 !== 0 ? (
-              <Fragment>
-                <span className="mr-8"></span>
-              </Fragment>
-            ) : (
-              ""
-            )}
           </Fragment>
         );
       })}

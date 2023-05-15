@@ -14,6 +14,7 @@ export default function Seat(props) {
     preSeat,
     currentSeat,
     nextSeat,
+    className,
   } = props;
 
   return (
@@ -22,12 +23,14 @@ export default function Seat(props) {
         handleSocket(userLogin, idShowtime, ghe);
         // handleChoiceSeat(preSeat, currentSeat, nextSeat);
       }}
-      disabled={ghe.bookded || classGheDangDat === "gheNguoiKhacDat"}
+      disabled={
+        ghe?.bookded || classGheDangDat === "gheNguoiKhacDat" || className
+      }
       className={`ghe ${classGheDaDat}
-                ${classGheDangDat} ${classGheBanDat}  text-center`}
+                ${classGheDangDat} ${classGheBanDat}  text-center ${className}`}
     >
-      {ghe.bookded ? (
-        ghe.idUser === userLogin?.id ? (
+      {ghe?.bookded ? (
+        ghe?.idUser === userLogin?.id ? (
           <UserOutlined style={{ marginBottom: 10, color: "#03a9f4" }} />
         ) : (
           <CloseOutlined style={{ marginBottom: 10 }} />
