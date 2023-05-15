@@ -69,7 +69,7 @@ export default function Template(props) {
       render={(propsRoute) => {
         return (
           <Fragment>
-            <Layout style={{ minHeight: "100vh" }}>
+            <Layout style={{ minHeight: "200vh" }}>
               <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
                 <div className="logo" />
                 <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">

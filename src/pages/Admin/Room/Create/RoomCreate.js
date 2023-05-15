@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, Input, Select, InputNumber } from "antd";
+import { Form, Input, Select } from "antd";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { layDanhSachCumRapAction } from "../../../../redux/Actions/QuanLyCumRapAction";
 import { quanLyRapChieuServices } from "../../../../services/QuanLyRapChieuServices";
 import { themPhongAction } from "../../../../redux/Actions/QuanLyPhongAction";
 import { roomSize } from "../../../../constants/roomSize";
+import { NavLink } from "react-router-dom/cjs/react-router-dom";
 export default function RoomCreate(props) {
   const dispatch = useDispatch();
   const { lstGroupCinemas } = useSelector((state) => state.QuanLyCumRapReducer);
@@ -58,10 +59,10 @@ export default function RoomCreate(props) {
           span: 14,
         }}
         layout="horizontal"
-        initialValues={{
-          size: "default",
-        }}
-        size="default"
+        // initialValues={{
+        //   size: "default",
+        // }}
+        // size="default"
       >
         <Form.Item label="Cụm Rạp">
           <Select placeholder="Chọn Cụm Rạp" onChange={changeGroupCinema}>
@@ -108,6 +109,19 @@ export default function RoomCreate(props) {
               );
             })}
           </Select>
+          <div className="mt-4 ">
+            {formik.values.size !== "" ? (
+              <NavLink
+                exact
+                to={`/Admin/Rooms/PreviewRoom?${formik.values.size}`}
+                className="disabled:opacity-75"
+              >
+                Preview Room
+              </NavLink>
+            ) : (
+              ""
+            )}
+          </div>
           {formik.errors.size && formik.touched.size && (
             <p className="m-0 mt-1 text-red-600">{formik.errors.size}</p>
           )}

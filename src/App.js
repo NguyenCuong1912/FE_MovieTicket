@@ -47,6 +47,7 @@ import { DOMAIN_STATIC_FILE } from "./utils/Settings/config";
 import Banner from "./pages/Admin/Banner";
 import CreateBanner from "./pages/Admin/Banner/Create";
 import EditBanner from "./pages/Admin/Banner/Edit";
+import RoomPreview from "./components/Room/Preview";
 const socket = io.connect(`${DOMAIN_STATIC_FILE}`);
 export const history = createBrowserHistory();
 export default function App() {
@@ -89,6 +90,11 @@ export default function App() {
         <Template path="/Admin/Rooms" exact Component={Room} />
         <Template path="/Admin/Rooms/Create" exact Component={RoomCreate} />
         <Template path="/Admin/Rooms/Edit/:id" exact Component={RoomEdit} />
+        <Template
+          path="/Admin/Rooms/PreviewRoom"
+          exact
+          Component={RoomPreview}
+        />
         {/* ShowTime */}
         <Template path="/Admin/ShowTimes" exact Component={ShowTime} />
         <Template

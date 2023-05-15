@@ -20,6 +20,9 @@ export class BannerServices extends baseServices {
   createBanner = (data) => {
     return this.post("/banners", data);
   };
+  changeStatus = (id, data) => {
+    return this.put(`/banners/status/${id}`, data);
+  };
 }
 
 export const bannerServices = new BannerServices();
