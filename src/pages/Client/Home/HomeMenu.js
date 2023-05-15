@@ -75,8 +75,8 @@ function HomeMenu(props) {
                                                 <div className='flex flex-wrap' >
                                                     {phim.lstShowDate?.map((time, index) => {
                                                         return (
-                                                            <NavLink to={`${`/checkout/${time.id}`}`}>
-                                                                <button className='rounded m-5 ml-6 mr-3 py-0.5 px-4 border' key={index}>
+                                                            <NavLink className=' m-5 ml-6 mr-3' to={`${`/checkout/${time.id}`}`}>
+                                                                <button className='rounded py-0.5 px-4 border' key={index}>
                                                                     {moment(time.showDate).format('hh:mm A')}
                                                                     <p className='m-0 text-xs'>{moment(time.showDate).format('DD/MM/YYYY')}</p>
                                                                 </button>
