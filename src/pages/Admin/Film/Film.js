@@ -16,6 +16,7 @@ import {
 import { DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
 export default function Film(props) {
   const { lstPhim } = useSelector((state) => state.QuanLyPhimReducer);
+  console.log(lstPhim);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(layDanhSachPhimAction());
@@ -34,7 +35,7 @@ export default function Film(props) {
       width: "20%",
     },
     {
-      title: "Tên Phim",
+      title: "Actor",
       dataIndex: "actor",
       width: "10%",
     },

@@ -1,21 +1,43 @@
-import React from "react";
+import React, { memo } from "react";
 import { CloseOutlined, UserOutlined } from "@ant-design/icons";
 import "./Ghe.css";
-export default function Seat(props) {
+import { useSelector } from "react-redux";
+
+export default React.memo(function Seat(props) {
   const {
     ghe,
-    userLogin,
     classGheBanDat,
     classGheDangDat,
     classGheDaDat,
     handleSocket,
-    handleChoiceSeat,
+    // handleChoiceSeat,
     idShowtime,
     preSeat,
     currentSeat,
     nextSeat,
     className,
   } = props;
+  
+  const userLogin = useSelector((state) => state.QuanLyNguoiDungReducer.userLogin);
+  // const { phongVe, listGheDangDat } = useSelector(
+  //   (state) => state.QuanLySeatsReducer
+  // );
+  console.log('render', userLogin);
+
+  // const isFrontSeat = listGheDangDat?.forEach((item) => {
+  //   const newItem = item?.id - 1
+
+  //   const abc = listGheDangDat?.find((item) => {
+  //     console.log(newItem,item,"sdasdasd");
+  //     return item?.id === newItem
+  //   })
+
+  //   return abc
+  //   console.log(item, "itemitem");
+  // })
+  // console.log(isFrontSeat, "isFrontSeat");
+
+  // console.log(listGheDangDat, "listGheDangDat");
 
   return (
     <button
@@ -26,8 +48,8 @@ export default function Seat(props) {
       disabled={
         ghe?.bookded || classGheDangDat === "gheNguoiKhacDat" || className
       }
-      className={`ghe ${classGheDaDat}
-                ${classGheDangDat} ${classGheBanDat}  text-center ${className}`}
+      className={`ghe
+                ${classGheDangDat} ${classGheBanDat} ${classGheDaDat}  text-center ${className}`}
     >
       {ghe?.bookded ? (
         ghe?.idUser === userLogin?.id ? (
@@ -40,4 +62,4 @@ export default function Seat(props) {
       )}
     </button>
   );
-}
+})

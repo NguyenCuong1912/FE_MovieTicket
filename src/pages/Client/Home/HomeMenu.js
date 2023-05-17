@@ -17,20 +17,21 @@ function HomeMenu(props) {
     return (
         <>
             <Tabs style={{
-                margin: 10
+                margin: 10,
             }} className='border rounded mx-2' tabPosition={state.tabPosition}>
                 {lichChieu?.map((item, index) => {
-                    return <TabPane tab={
-                        <div
-                            style={{
-                                height: '10vh',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <img style={{ objectFit: 'fill' }} className='w-10 rounded-full' src={`${DOMAIN_STATIC_FILE}${item.logo}`} alt={`${DOMAIN_STATIC_FILE}${item.logo}`} />
-                        </div>}
+                    return <TabPane
+                        tab={
+                            <div
+                                style={{
+                                    height: '10vh',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <img style={{ objectFit: 'fill' }} className='w-10 rounded-full' src={`${DOMAIN_STATIC_FILE}${item.logo}`} alt={`${DOMAIN_STATIC_FILE}${item.logo}`} />
+                            </div>}
                         key={index}>
                         {
                             <Tabs tabPosition={state.tabPosition} >
@@ -62,7 +63,11 @@ function HomeMenu(props) {
                                                 <div className='flex ml-6' >
                                                     <img onClick={() => {
                                                         history.push(`/DetailsFilm/${phim.idFilm}`)
-                                                    }} style={{ objectFit: 'fill', height: '10vh', width: '15vh', borderRadius: 10 }} className='w-20 h-20 cursor-pointer' src={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`} alt={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`} />
+                                                    }}
+                                                        style={{ objectFit: 'fill', height: '20vh', width: '15vh', borderRadius: 10, cursor: 'pointer',border:'1px solid #ebebec' }}
+                                                        lassName='w-20 h-20 cursor-pointer'
+                                                        src={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`}
+                                                        alt={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`} />
                                                     <div
                                                         onClick={() => {
                                                             history.push(`/DetailsFilm/${phim.idFilm}`)

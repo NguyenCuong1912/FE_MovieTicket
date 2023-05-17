@@ -24,15 +24,16 @@ export default function DetailsFilm(props) {
         dispatch(lichChieuTheoHeThongRap(id))
     }, [id])
 
-    console.log('showTime', showTime);
-
+    
     const { TabPane } = Tabs;
-
+    
     const renderContact = () => {
         return <view>
             <p>Bạn muốn nhắn nhủ gì tới chúng tôi ?</p>
         </view>
     }
+    console.log('showTime', showTime);
+    console.log('phimEdit',phimEdit);
 
     const renderDescription = () => {
         return (
@@ -75,6 +76,7 @@ export default function DetailsFilm(props) {
             </view >
         )
     }
+    console.log('phimEdit',phimEdit);
 
     return (
         <div className='bg-cover bg-center' style={{ backgroundImage: `url(${DOMAIN_STATIC_FILE}${phimEdit.imgFilm})`, }}>

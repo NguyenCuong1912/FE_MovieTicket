@@ -28,8 +28,9 @@ export default function RoomNoraml(props) {
               : "gheNguoiKhacDat";
         }
         return (
-          <Fragment key={index}>
+          <Fragment>
             <Seat
+              key={ghe.id}
               ghe={ghe}
               userLogin={userLogin}
               classGheDaDat={classGheDaDat}
