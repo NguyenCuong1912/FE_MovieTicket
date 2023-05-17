@@ -147,6 +147,8 @@ export default function Checkout(props) {
         />
       );
     }
+    console.log('userLogin',userLogin);
+    console.log('lstGhe',lstGhe);
     if (showTimeEdit?.room.size === "L") {
       return (
         <RoomSizeL

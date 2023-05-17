@@ -17,7 +17,7 @@ export default function RoomNoraml(props) {
         let classGheBanDat = "";
         let classGheDangDat = "";
         //! seat you booked
-        ghe.idUser === userLogin?.id
+        ghe.idUser == userLogin?.id
           ? (classGheBanDat = "gheBanDat")
           : (classGheBanDat = "");
         //! keepSeat
@@ -28,14 +28,8 @@ export default function RoomNoraml(props) {
               : "gheNguoiKhacDat";
         }
         return (
-<<<<<<< HEAD
           <Fragment key={ghe.id}>
             <Seat
-=======
-          <Fragment>
-            <Seat
-              key={ghe.id}
->>>>>>> 2c8a06b46c9af09ed70802fa8f97511a14e18ad4
               ghe={ghe}
               userLogin={userLogin}
               classGheDaDat={classGheDaDat}
@@ -45,7 +39,6 @@ export default function RoomNoraml(props) {
               idShowtime={idShowtime}
               className={className}
             />
-
             {(index + 1) % seat_of_row === 0 ? <br /> : ""}
           </Fragment>
         );

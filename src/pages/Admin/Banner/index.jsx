@@ -55,15 +55,12 @@ export default function Banner(props) {
         return (
           <div
             style={{
-              width: 100,
+              width: 250,
               height: 100,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundImage: `url(${DOMAIN_STATIC_FILE}${banner.image})`,
             }}
           >
             <img
-              style={{ width: 100, height: 100, opacity: 0 }}
+              style={{ width: '100%',objectFit:'fill', }}
               src={`${DOMAIN_STATIC_FILE}${banner.image}`}
               alt={banner.image}
               onError={({ currentTarget }) => {

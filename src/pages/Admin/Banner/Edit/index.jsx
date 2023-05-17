@@ -82,7 +82,7 @@ export default function EditBanner(props) {
           )}
           <br />
           <img
-            style={{ width: 150, height: 150 }}
+            style={{ width: 300, height: 150 }}
             src={
               srcImg === ""
                 ? `${DOMAIN_STATIC_FILE}${detailBanner.image}`

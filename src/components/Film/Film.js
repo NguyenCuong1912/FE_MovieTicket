@@ -25,15 +25,16 @@ export default function Film(props) {
         >
           <img
             src={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`}
-            style={{ height: 300, width: '80%', objectFit: 'fill',marginTop:10 }}
+            style={{ height: 300, width: '70%', objectFit: 'fill',marginTop:10 ,borderRadius:10,border:'1px solid #ebebec'}}
             alt={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`}
           />
           <div
             className="w-full playVideo "
             style={{
               top: 10,
-              width: "80%",
+              width: "70%",
               height: 300,
+              borderRadius: 10,
               position: "absolute",
               backgroundColor: "rgba(0,0,0,.5)",
               display: "flex",
@@ -65,7 +66,7 @@ export default function Film(props) {
           onClick={() => {
             history.push(`/DetailsFilm/${phim.id}`);
           }}
-          className="cursor-pointer"
+          className="cursor-pointer mx-6"
         >
           <div className="mt-6 mb-2">
             <h2 className="text-xl h-16 font-semibold tracking-wide">
@@ -73,7 +74,7 @@ export default function Film(props) {
             </h2>
           </div>
           <p className="moTa text-coolGray-800">
-            {_.truncate(phim.description, { length: 80, separator: "" })}
+            {_.truncate(phim.description, { length: 90, separator: "" })}
           </p>
         </div>
       </div>

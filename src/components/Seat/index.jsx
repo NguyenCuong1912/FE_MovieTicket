@@ -17,28 +17,11 @@ export default React.memo(function Seat(props) {
     nextSeat,
     className,
   } = props;
-  
+  console.log('classGheDaDat',classGheDaDat);
+  console.log('classGheBanDat',classGheBanDat);
+  console.log('classGheDangDat',classGheDangDat);
+
   const userLogin = useSelector((state) => state.QuanLyNguoiDungReducer.userLogin);
-  // const { phongVe, listGheDangDat } = useSelector(
-  //   (state) => state.QuanLySeatsReducer
-  // );
-  console.log('render', userLogin);
-
-  // const isFrontSeat = listGheDangDat?.forEach((item) => {
-  //   const newItem = item?.id - 1
-
-  //   const abc = listGheDangDat?.find((item) => {
-  //     console.log(newItem,item,"sdasdasd");
-  //     return item?.id === newItem
-  //   })
-
-  //   return abc
-  //   console.log(item, "itemitem");
-  // })
-  // console.log(isFrontSeat, "isFrontSeat");
-
-  // console.log(listGheDangDat, "listGheDangDat");
-
   return (
     <button
       onClick={() => {
@@ -48,8 +31,8 @@ export default React.memo(function Seat(props) {
       disabled={
         ghe?.bookded || classGheDangDat === "gheNguoiKhacDat" || className
       }
-      className={`ghe
-                ${classGheDangDat} ${classGheBanDat} ${classGheDaDat}  text-center ${className}`}
+
+      className={`ghe ${classGheDaDat}  ${classGheDangDat} ${classGheBanDat} text-center ${className}`}
     >
       {ghe?.bookded ? (
         ghe?.idUser === userLogin?.id ? (
