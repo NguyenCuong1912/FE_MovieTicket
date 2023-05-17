@@ -19,6 +19,7 @@ import { NavLink } from "react-router-dom";
 import { history } from "../../../App";
 import Export_Excel from "./../../../components/Excel/Export_Excel";
 import {
+  ChangeStatusBannerAction,
   DeleteBannerAction,
   GetBannerAction,
 } from "../../../redux/Actions/BannerAction";
@@ -28,10 +29,10 @@ export default function Banner(props) {
   const { lstBanner } = useSelector((state) => state.BannerReducer);
   console.log("lst", lstBanner);
   const confirm = (id, status) => {
-    if (status === "Unlock") {
-      dispatch(lockAndUnLockAction(id, { isBlock: 0 }));
+    if (status === "hidden") {
+      dispatch(ChangeStatusBannerAction(id, { isActive: false }));
     } else {
-      dispatch(lockAndUnLockAction(id, { isBlock: 1 }));
+      dispatch(ChangeStatusBannerAction(id, { isActive: true }));
     }
   };
   const dispatch = useDispatch();
@@ -84,9 +85,9 @@ export default function Banner(props) {
           return (
             <Popconfirm
               placement="top"
-              title="Bạn có muốn cho banner này ẩn ?"
+              title="Bạn có muốn ẩn banner này ?"
               onConfirm={() => {
-                confirm(banner.id, "Unlock");
+                confirm(banner.id, "hidden");
               }}
               okText="Yes"
               cancelText="No"
@@ -102,7 +103,7 @@ export default function Banner(props) {
               placement="top"
               title="Bạn có muốn hiện thị banner này ?"
               onConfirm={() => {
-                confirm(banner.id, "lock");
+                confirm(banner.id, "display");
               }}
               okText="Yes"
               cancelText="No"

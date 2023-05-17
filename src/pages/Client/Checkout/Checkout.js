@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "../Checkout/Checkout.module.css";
 import "../Checkout/Checkout.css";
@@ -24,44 +24,77 @@ import { chiTietLichChieuAction } from "../../../redux/Actions/QuanLyLichChieuAc
 import RoomSizeM from "../../../components/Room/SizeM";
 import RoomSizeL from "../../../components/Room/SizeL";
 import RoomSizeS from "../../../components/Room/SizeS";
+import { sizeConst } from "../../../constants/roomSize";
+import RoomNoraml from "../../../components/Room/Normal";
 
 const { confirm } = Modal;
 export default function Checkout(props) {
-  const socket = io.connect(`${DOMAIN_STATIC_FILE}`);
-  const { id } = props.match.params;
-
-  const dispatch = useDispatch();
   //! State
-  const { phongVe, listGheDangDat } = useSelector(
-    (state) => state.QuanLySeatsReducer
+  const listGheRef = useRef([]);
+  const socketRef = useRef(null);
+  const socket = io.connect(`${DOMAIN_STATIC_FILE}`);
+  socketRef.current = socket;
+
+  const { id } = props.match.params;
+  const dispatch = useDispatch();
+
+  const listGheDangDat = useSelector(
+    (state) => state.QuanLySeatsReducer.listGheDangDat
   );
-  const { showTimeEdit } = useSelector((state) => state.QuanLyLichChieuReducer);
-  const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
+  const showTimeEdit = useSelector((state) => state.QuanLyLichChieuReducer.showTimeEdit);
+  const userLogin = useSelector((state) => state.QuanLyNguoiDungReducer.userLogin);
+  const phongVe = useSelector(
+    (state) => state.QuanLySeatsReducer.phongVe
+  );
+
   const { lstGhe, film } = phongVe;
   const [state, setState] = useState("00:00:00");
+
+  const data = useMemo(() => {
+    return {
+      user: userLogin,
+      room: id,
+      seats: listGheDangDat,
+    }
+  }, [userLogin, id, listGheDangDat]);
+  listGheRef.current = listGheDangDat;
+
   useEffect(() => {
-    const data = { room: props.match.params.id, user: userLogin };
-    socket.emit("join-room", data);
-    dispatch(layDanhSachGheTheoLichChieu(props.match.params.id, userLogin));
+    const data = { room: id, user: userLogin };
+    socketRef.current.emit("join-room", data);
+    dispatch(layDanhSachGheTheoLichChieu(id, userLogin));
     dispatch(chiTietLichChieuAction(id));
     dispatch({
       type: CLEAR_VE_DANG_CHON,
     });
     // setState(Date.now() + 5 * 60 * 1000);
     setState(Date.now() + 10 * 60 * 1000);
-    //!
   }, []);
+
   useEffect(() => {
-    socket.on("receive-order-seat", (data) => {
+    const leaveRoom = () => {
+      const payloadLeaveRoom = { room: id, user: userLogin, seats: listGheRef.current };
+      socketRef.current.emit("leaveRroom", payloadLeaveRoom);
+    }
+
+    window.addEventListener("beforeunload", () => {
+      leaveRoom();
+    });
+
+
+    return () => {
+      leaveRoom();
+      window.removeEventListener('beforeunload', leaveRoom);
+    }
+  }, [userLogin, id]);
+
+  useEffect(() => {
+    socketRef.current.on("receive-order-seat", (data) => {
       dispatch(layDanhSachGheTheoLichChieu(props.match.params.id, userLogin));
     });
-  }, [socket]);
+  }, []);
+
   //! Function
-  const data = {
-    user: userLogin,
-    room: props.match.params.id,
-    seats: listGheDangDat,
-  };
   const showLeaveConfirm = () => {
     confirm({
       title: "Bạn có chắc muốn rời khỏi phòng đặt vé ?",
@@ -77,26 +110,29 @@ export default function Checkout(props) {
       onCancel() { },
     });
   };
-  const handleSocket = (userLogin, idShowtime, ghe) => {
+
+  const handleSocket = useCallback((userLogin, idShowtime, ghe) => {
     const data = {
       user: userLogin,
       room: idShowtime,
       seat: ghe,
     };
-    socket.emit("choice-seat", data);
-    dispatch({
-      type: CHON_GHE,
-      gheDuocChon: ghe,
-    });
-  };
+    socketRef.current.emit("choice-seat", data);
+    // dispatch({
+    //   type: CHON_GHE,
+    //   gheDuocChon: ghe,
+    // });
+  }, [dispatch]);
+
   const handleChoiceSeat = (preSeat, currentSeat, nextSeat) => {
     console.log("pre", preSeat);
     console.log("current", currentSeat);
     console.log("next", nextSeat);
   };
-  const size = "M";
+  // console.log('render');
+  //! Render
   const renderListGhe = () => {
-    if (size === "M") {
+    if (showTimeEdit?.room.size === "M") {
       return (
         <RoomSizeM
           seat_of_row={16}
@@ -111,7 +147,7 @@ export default function Checkout(props) {
         />
       );
     }
-    if (size === "L") {
+    if (showTimeEdit?.room.size === "L") {
       return (
         <RoomSizeL
           seat_of_row={20}
@@ -122,9 +158,20 @@ export default function Checkout(props) {
         />
       );
     }
-    if (size === "S") {
+    if (showTimeEdit?.room.size === "S") {
       return (
         <RoomSizeS
+          seat_of_row={16}
+          lstGhe={lstGhe}
+          userLogin={userLogin}
+          handleSocket={handleSocket}
+          idShowtime={id}
+        />
+      );
+    }
+    if (!sizeConst.includes(showTimeEdit?.room.size)) {
+      return (
+        <RoomNoraml
           seat_of_row={16}
           lstGhe={lstGhe}
           userLogin={userLogin}

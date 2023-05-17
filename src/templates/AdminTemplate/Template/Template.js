@@ -22,11 +22,11 @@ export default function Template(props) {
   const [collapsed, setCollapsed] = useState(false);
   const userLogin = JSON.parse(sessionStorage.getItem("USER_LOGIN"));
   const dispatch = useDispatch();
-  if (!Cookies.get("cookieUser")) {
-    sessionStorage.removeItem("USER_LOGIN");
-    alert("Bạn đã hết phiên cần đăng nhập lại");
-    history.push(`/signIn`);
-  }
+  // if (!Cookies.get("cookieUser")) {
+  //   sessionStorage.removeItem("USER_LOGIN");
+  //   alert("Bạn đã hết phiên cần đăng nhập lại");
+  //   history.push(`/signIn`);
+  // }
   useEffect(() => {
     window.scrollTo(0, 0);
   });
@@ -69,7 +69,7 @@ export default function Template(props) {
       render={(propsRoute) => {
         return (
           <Fragment>
-            <Layout style={{ minHeight: "100vh" }}>
+            <Layout style={{ minHeight: "200vh" }}>
               <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
                 <div className="logo" />
                 <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
