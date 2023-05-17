@@ -38,9 +38,7 @@ export default function EditBanner(props) {
     initialValues: {
       image: {},
     },
-    validationSchema: Yup.object({
-      // image: Yup.object.
-    }),
+    validationSchema: Yup.object({}),
     onSubmit: (values) => {
       if (!values.image.name) {
         alert("Bạn cần chọn ảnh để sửa  ");
@@ -50,7 +48,6 @@ export default function EditBanner(props) {
       for (var key in values) {
         formData.append("banner", values.image, values.image.name);
       }
-      // dispatch(CreateBannerAction(formData));
     },
   });
   return (

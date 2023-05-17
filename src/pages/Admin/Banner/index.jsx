@@ -1,31 +1,25 @@
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  PlusOutlined
+} from "@ant-design/icons";
+import { Popconfirm, Table } from "antd";
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Table, Input, Popconfirm } from "antd";
-import {
-  PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  LockOutlined,
-  EyeOutlined,
-  EyeInvisibleOutlined,
-  UnlockOutlined,
-} from "@ant-design/icons";
-import {
-  layDanhSachnguoiDungAction,
-  lockAndUnLockAction,
-  xoaNguoiDungAction,
-} from "./../../../redux/Actions/QuanLyNguoiDungAction";
 import { NavLink } from "react-router-dom";
 import { history } from "../../../App";
-import Export_Excel from "./../../../components/Excel/Export_Excel";
 import {
   ChangeStatusBannerAction,
   DeleteBannerAction,
   GetBannerAction,
 } from "../../../redux/Actions/BannerAction";
 import { DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
+import {
+  layDanhSachnguoiDungAction
+} from "./../../../redux/Actions/QuanLyNguoiDungAction";
 export default function Banner(props) {
-  const { listUser } = useSelector((state) => state.QuanLyNguoiDungReducer);
   const { lstBanner } = useSelector((state) => state.BannerReducer);
   console.log("lst", lstBanner);
   const confirm = (id, status) => {

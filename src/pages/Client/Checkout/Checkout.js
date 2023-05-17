@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "../Checkout/Checkout.module.css";
 import "../Checkout/Checkout.css";
@@ -41,11 +47,13 @@ export default function Checkout(props) {
   const listGheDangDat = useSelector(
     (state) => state.QuanLySeatsReducer.listGheDangDat
   );
-  const showTimeEdit = useSelector((state) => state.QuanLyLichChieuReducer.showTimeEdit);
-  const userLogin = useSelector((state) => state.QuanLyNguoiDungReducer.userLogin);
-  const phongVe = useSelector(
-    (state) => state.QuanLySeatsReducer.phongVe
+  const showTimeEdit = useSelector(
+    (state) => state.QuanLyLichChieuReducer.showTimeEdit
   );
+  const userLogin = useSelector(
+    (state) => state.QuanLyNguoiDungReducer.userLogin
+  );
+  const phongVe = useSelector((state) => state.QuanLySeatsReducer.phongVe);
 
   const { lstGhe, film } = phongVe;
   const [state, setState] = useState("00:00:00");
@@ -55,7 +63,7 @@ export default function Checkout(props) {
       user: userLogin,
       room: id,
       seats: listGheDangDat,
-    }
+    };
   }, [userLogin, id, listGheDangDat]);
   listGheRef.current = listGheDangDat;
 
@@ -73,19 +81,22 @@ export default function Checkout(props) {
 
   useEffect(() => {
     const leaveRoom = () => {
-      const payloadLeaveRoom = { room: id, user: userLogin, seats: listGheRef.current };
+      const payloadLeaveRoom = {
+        room: id,
+        user: userLogin,
+        seats: listGheRef.current,
+      };
       socketRef.current.emit("leaveRroom", payloadLeaveRoom);
-    }
+    };
 
     window.addEventListener("beforeunload", () => {
       leaveRoom();
     });
 
-
     return () => {
       leaveRoom();
-      window.removeEventListener('beforeunload', leaveRoom);
-    }
+      window.removeEventListener("beforeunload", leaveRoom);
+    };
   }, [userLogin, id]);
 
   useEffect(() => {
@@ -99,7 +110,6 @@ export default function Checkout(props) {
     confirm({
       title: "Bạn có chắc muốn rời khỏi phòng đặt vé ?",
       icon: <ExclamationCircleOutlined />,
-      // content: 'Some descriptions',
       okText: "Yes",
       cancelType: "success",
       cancelText: "No",
@@ -107,29 +117,22 @@ export default function Checkout(props) {
         socket.emit("leaveRroom", data);
         history.push("/");
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
 
-  const handleSocket = useCallback((userLogin, idShowtime, ghe) => {
-    const data = {
-      user: userLogin,
-      room: idShowtime,
-      seat: ghe,
-    };
-    socketRef.current.emit("choice-seat", data);
-    // dispatch({
-    //   type: CHON_GHE,
-    //   gheDuocChon: ghe,
-    // });
-  }, [dispatch]);
+  const handleSocket = useCallback(
+    (userLogin, idShowtime, ghe) => {
+      const data = {
+        user: userLogin,
+        room: idShowtime,
+        seat: ghe,
+      };
+      socketRef.current.emit("choice-seat", data);
+    },
+    [dispatch]
+  );
 
-  const handleChoiceSeat = (preSeat, currentSeat, nextSeat) => {
-    console.log("pre", preSeat);
-    console.log("current", currentSeat);
-    console.log("next", nextSeat);
-  };
-  // console.log('render');
   //! Render
   const renderListGhe = () => {
     if (showTimeEdit?.room.size === "M") {
@@ -139,7 +142,6 @@ export default function Checkout(props) {
           lstGhe={lstGhe}
           userLogin={userLogin}
           handleSocket={handleSocket}
-          // handleChoiceSeat={handleChoiceSeat}
           idShowtime={id}
           preSeat
           currentSeat
@@ -147,8 +149,6 @@ export default function Checkout(props) {
         />
       );
     }
-    console.log('userLogin',userLogin);
-    console.log('lstGhe',lstGhe);
     if (showTimeEdit?.room.size === "L") {
       return (
         <RoomSizeL
@@ -212,7 +212,7 @@ export default function Checkout(props) {
 
             <div className="ml-3">
               <h3 className="mb-0">
-                {film.groupName} - Rạp {film.rapChieu} - Phòng { }
+                {film.groupName} - Rạp {film.rapChieu} - Phòng {}
                 {showTimeEdit?.room?.roomName}
               </h3>
               <p className="mb-0 text-gray-500 font-bold opacity-50">
@@ -360,6 +360,6 @@ export default function Checkout(props) {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 }

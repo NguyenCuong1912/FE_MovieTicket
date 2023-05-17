@@ -1,7 +1,7 @@
-import React, { memo } from "react";
 import { CloseOutlined, UserOutlined } from "@ant-design/icons";
-import "./Ghe.css";
+import React from "react";
 import { useSelector } from "react-redux";
+import "./Ghe.css";
 
 export default React.memo(function Seat(props) {
   const {
@@ -10,18 +10,13 @@ export default React.memo(function Seat(props) {
     classGheDangDat,
     classGheDaDat,
     handleSocket,
-    // handleChoiceSeat,
     idShowtime,
-    preSeat,
-    currentSeat,
-    nextSeat,
     className,
   } = props;
-  console.log('classGheDaDat',classGheDaDat);
-  console.log('classGheBanDat',classGheBanDat);
-  console.log('classGheDangDat',classGheDangDat);
 
-  const userLogin = useSelector((state) => state.QuanLyNguoiDungReducer.userLogin);
+  const userLogin = useSelector(
+    (state) => state.QuanLyNguoiDungReducer.userLogin
+  );
   return (
     <button
       onClick={() => {
@@ -31,7 +26,6 @@ export default React.memo(function Seat(props) {
       disabled={
         ghe?.bookded || classGheDangDat === "gheNguoiKhacDat" || className
       }
-
       className={`ghe ${classGheDaDat}  ${classGheDangDat} ${classGheBanDat} text-center ${className}`}
     >
       {ghe?.bookded ? (
@@ -45,4 +39,4 @@ export default React.memo(function Seat(props) {
       )}
     </button>
   );
-})
+});
