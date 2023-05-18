@@ -1,4 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "../Checkout/Checkout.module.css";
 import "../Checkout/Checkout.css";
@@ -12,11 +18,6 @@ import moment from "moment";
 import { history } from "../../../App";
 import { layDanhSachGheTheoLichChieu } from "../../../redux/Actions/QuanLySeatsAction";
 import { DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
-import {
-  CHON_GHE,
-  CLEAR_VE_DANG_CHON,
-} from "../../../redux/Types/QuanLySeatsType";
-
 import Countdown from "react-countdown";
 import { RequirementCheckoutAction } from "../../../redux/Actions/QuanLyCheckoutAction";
 import io from "socket.io-client";
@@ -29,46 +30,78 @@ import RoomNoraml from "../../../components/Room/Normal";
 
 const { confirm } = Modal;
 export default function Checkout(props) {
+  //! State
+  const listGheRef = useRef([]);
+  const socketRef = useRef(null);
   const socket = io.connect(`${DOMAIN_STATIC_FILE}`);
+  socketRef.current = socket;
+
   const { id } = props.match.params;
   const dispatch = useDispatch();
-  //! State
-  const { phongVe, listGheDangDat } = useSelector(
-    (state) => state.QuanLySeatsReducer
+
+  const listGheDangDat = useSelector(
+    (state) => state.QuanLySeatsReducer.listGheDangDat
   );
-  const { showTimeEdit } = useSelector((state) => state.QuanLyLichChieuReducer);
-  const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
+  const showTimeEdit = useSelector(
+    (state) => state.QuanLyLichChieuReducer.showTimeEdit
+  );
+  const userLogin = useSelector(
+    (state) => state.QuanLyNguoiDungReducer.userLogin
+  );
+  const phongVe = useSelector((state) => state.QuanLySeatsReducer.phongVe);
+
   const { lstGhe, film } = phongVe;
   const [state, setState] = useState("00:00:00");
 
+  const data = useMemo(() => {
+    return {
+      user: userLogin,
+      room: id,
+      seats: listGheDangDat,
+    };
+  }, [userLogin, id, listGheDangDat]);
+  listGheRef.current = listGheDangDat;
+
   useEffect(() => {
-    const data = { room: props.match.params.id, user: userLogin };
-    socket.emit("join-room", data);
-    dispatch(layDanhSachGheTheoLichChieu(props.match.params.id, userLogin));
+    const data = { room: id, user: userLogin };
+    socketRef.current.emit("join-room", data);
+    dispatch(layDanhSachGheTheoLichChieu(id, userLogin));
     dispatch(chiTietLichChieuAction(id));
-    dispatch({
-      type: CLEAR_VE_DANG_CHON,
-    });
     // setState(Date.now() + 5 * 60 * 1000);
     setState(Date.now() + 10 * 60 * 1000);
-    //!
   }, []);
+
   useEffect(() => {
-    socket.on("receive-order-seat", (data) => {
+    const leaveRoom = () => {
+      const payloadLeaveRoom = {
+        room: id,
+        user: userLogin,
+        seats: listGheRef.current,
+      };
+      socketRef.current.emit("leaveRroom", payloadLeaveRoom);
+    };
+
+    window.addEventListener("beforeunload", () => {
+      leaveRoom();
+    });
+
+    return () => {
+      leaveRoom();
+      window.removeEventListener("beforeunload", leaveRoom);
+    };
+  }, [userLogin, id]);
+
+  useEffect(() => {
+    socketRef.current.on("receive-order-seat", (data) => {
       dispatch(layDanhSachGheTheoLichChieu(props.match.params.id, userLogin));
     });
-  }, [socket]);
+  }, []);
+
   //! Function
-  const data = {
-    user: userLogin,
-    room: props.match.params.id,
-    seats: listGheDangDat,
-  };
   const showLeaveConfirm = () => {
     confirm({
       title: "Bạn có chắc muốn rời khỏi phòng đặt vé ?",
       icon: <ExclamationCircleOutlined />,
-      // content: 'Some descriptions',
       okText: "Yes",
       cancelType: "success",
       cancelText: "No",
@@ -79,23 +112,20 @@ export default function Checkout(props) {
       onCancel() {},
     });
   };
-  const handleSocket = (userLogin, idShowtime, ghe) => {
-    const data = {
-      user: userLogin,
-      room: idShowtime,
-      seat: ghe,
-    };
-    socket.emit("choice-seat", data);
-    dispatch({
-      type: CHON_GHE,
-      gheDuocChon: ghe,
-    });
-  };
-  const handleChoiceSeat = (preSeat, currentSeat, nextSeat) => {
-    console.log("pre", preSeat);
-    console.log("current", currentSeat);
-    console.log("next", nextSeat);
-  };
+
+  const handleSocket = useCallback(
+    (userLogin, idShowtime, ghe) => {
+      const data = {
+        user: userLogin,
+        room: idShowtime,
+        seat: ghe,
+      };
+      socketRef.current.emit("choice-seat", data);
+    },
+    [dispatch]
+  );
+
+  //! Render
   const renderListGhe = () => {
     if (showTimeEdit?.room.size === "M") {
       return (
@@ -104,11 +134,7 @@ export default function Checkout(props) {
           lstGhe={lstGhe}
           userLogin={userLogin}
           handleSocket={handleSocket}
-          // handleChoiceSeat={handleChoiceSeat}
           idShowtime={id}
-          preSeat
-          currentSeat
-          nextSeat
         />
       );
     }
@@ -190,9 +216,6 @@ export default function Checkout(props) {
                 <Countdown
                   onComplete={() => {
                     alert("Quá thời gian đặt Vé");
-                    dispatch({
-                      type: CLEAR_VE_DANG_CHON,
-                    });
                     socket.emit("leaveRroom", data);
                     history.push("/");
                   }}

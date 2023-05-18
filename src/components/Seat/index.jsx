@@ -1,33 +1,38 @@
-import React from "react";
 import { CloseOutlined, UserOutlined } from "@ant-design/icons";
+import React from "react";
+import { useSelector } from "react-redux";
 import "./Ghe.css";
-export default function Seat(props) {
-  const {
-    ghe,
-    userLogin,
-    classGheBanDat,
-    classGheDangDat,
-    classGheDaDat,
-    handleSocket,
-    handleChoiceSeat,
-    idShowtime,
-    preSeat,
-    currentSeat,
-    nextSeat,
-    className,
-  } = props;
 
+export default React.memo(function Seat(props) {
+  const { ghe, handleSocket, idShowtime, className } = props;
+
+  const userLogin = useSelector(
+    (state) => state.QuanLyNguoiDungReducer.userLogin
+  );
+  let classGheDaDat =
+    ghe.bookded && ghe.idUser !== userLogin.id ? "gheDaDat" : "";
+  let classGheBanDat = "";
+  let classGheDangDat = "";
+  //! seat you booked
+  ghe.idUser === userLogin?.id
+    ? (classGheBanDat = "gheBanDat")
+    : (classGheBanDat = "");
+  //! keepSeat
+  if (!!ghe.keepSeat) {
+    classGheDangDat =
+      parseInt(ghe.keepSeat) === userLogin?.id
+        ? "gheBanDangDat"
+        : "gheNguoiKhacDat";
+  }
   return (
     <button
       onClick={() => {
         handleSocket(userLogin, idShowtime, ghe);
-        // handleChoiceSeat(preSeat, currentSeat, nextSeat);
       }}
       disabled={
         ghe?.bookded || classGheDangDat === "gheNguoiKhacDat" || className
       }
-      className={`ghe ${classGheDaDat}
-                ${classGheDangDat} ${classGheBanDat}  text-center ${className}`}
+      className={`ghe ${classGheDaDat}  ${classGheDangDat} ${classGheBanDat} text-center ${className}`}
     >
       {ghe?.bookded ? (
         ghe?.idUser === userLogin?.id ? (
@@ -40,4 +45,4 @@ export default function Seat(props) {
       )}
     </button>
   );
-}
+});
