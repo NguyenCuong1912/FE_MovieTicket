@@ -70,7 +70,7 @@ export default function Checkout(props) {
     // setState(Date.now() + 5 * 60 * 1000);
     setState(Date.now() + 10 * 60 * 1000);
   }, []);
-
+  //! event leave Room
   useEffect(() => {
     const leaveRoom = () => {
       const payloadLeaveRoom = {
@@ -215,8 +215,8 @@ export default function Checkout(props) {
               {
                 <Countdown
                   onComplete={() => {
-                    alert("Quá thời gian đặt Vé");
                     socket.emit("leaveRroom", data);
+                    alert("Quá thời gian đặt Vé");
                     history.push("/");
                   }}
                   daysInHours

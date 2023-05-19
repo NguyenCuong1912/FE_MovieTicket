@@ -18,7 +18,7 @@ export default React.memo(function Seat(props) {
     ? (classGheBanDat = "gheBanDat")
     : (classGheBanDat = "");
   //! keepSeat
-  if (!!ghe.keepSeat) {
+  if (!!ghe?.keepSeat && !ghe?.bookded) {
     classGheDangDat =
       parseInt(ghe.keepSeat) === userLogin?.id
         ? "gheBanDangDat"
