@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
-import { Tabs } from "antd";
+import { Button, Tabs } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import _ from "lodash";
 import moment from "moment";
+import QRCode from "react-qr-code";
 import {
+  SendVerifyEmailAction,
   capNhatNguoiDungAction,
   layChiTietNguoiDungAction,
 } from "../../../redux/Actions/QuanLyNguoiDungAction";
@@ -34,23 +36,25 @@ export default function Profile(props) {
 }
 
 export function DetailsProfile(props) {
-  const { userLogin } = useSelector((state) => state.QuanLyNguoiDungReducer);
+  const { userEdit, userLogin } = useSelector(
+    (state) => state.QuanLyNguoiDungReducer
+  );
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(layChiTietNguoiDungAction(userLogin.id));
+    dispatch(layChiTietNguoiDungAction(userLogin?.id));
   }, []);
+  console.log(userEdit);
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      type: userLogin?.typeUser?.type,
-      email: userLogin.email,
-      userName: userLogin.userName,
-      avatar: userLogin.avatar,
+      type: userEdit?.typeUser?.type,
+      email: userEdit.email,
+      userName: userEdit.userName,
       password: "",
-      phoneNumber: userLogin.phoneNumber,
+      phoneNumber: userEdit.phoneNumber,
     },
     onSubmit: (values) => {
-      dispatch(capNhatNguoiDungAction(userLogin.id, values));
+      dispatch(capNhatNguoiDungAction(userEdit.id, values));
     },
     validationSchema: Yup.object({
       userName: Yup.string().required("Tài khoản Không được trống"),
@@ -141,6 +145,21 @@ export function DetailsProfile(props) {
               )}
             </div>
           </div>
+          {!userEdit.isVerify ? (
+            <div className="flex flex-wrap -mx-3 mb-6 cursor-pointer hover:text-red-700">
+              <div className="w-full  px-3 mb-6 md:mb-0">
+                <p
+                  onClick={() => {
+                    dispatch(
+                      SendVerifyEmailAction(userEdit.email, userEdit.id)
+                    );
+                  }}
+                >
+                  Nhấn để xác thực tài khoản
+                </p>
+              </div>
+            </div>
+          ) : null}
         </div>
         <div className="flex justify-center">
           <button
@@ -160,7 +179,6 @@ export function BookingHistory(props) {
   const { lstTicketWithUser } = useSelector(
     (state) => state.QuanLyTicketReducer
   );
-  console.log("lst", lstTicketWithUser);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(danhSachVeTheoUserAction(userLogin.id));
@@ -168,6 +186,12 @@ export function BookingHistory(props) {
 
   const renderTicket = () => {
     return lstTicketWithUser.map((ticket, index) => {
+      const qr_generate = {
+        IDShowtime: ticket.IDShowtime,
+        Film: ticket.nameFilm,
+        Room: ticket.roomName,
+        ShowDate: ticket.showDate,
+      };
       return (
         <li
           key={index}
@@ -175,14 +199,14 @@ export function BookingHistory(props) {
         >
           <div className="flex w-full space-x-2 sm:space-x-4">
             <div
-              style={{
-                backgroundImage: `url(${DOMAIN_STATIC_FILE}${ticket.imgFilm})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
+            // style={{
+            //   backgroundImage: `url(${DOMAIN_STATIC_FILE}${ticket.imgFilm})`,
+            //   backgroundSize: "cover",
+            //   backgroundPosition: "center",
+            // }}
             >
               <img
-                className="flex-shrink-0 object-cover w-20 h-20 border-transparent rounded outline-none sm:w-32 sm:h-32 bg-coolGray-500 opacity-0"
+                className="flex-shrink-0 object-cover w-20 h-20 border-transparent rounded outline-none sm:w-32 sm:h-32 bg-coolGray-500 "
                 src={`${DOMAIN_STATIC_FILE}${ticket.imgFilm}`}
                 alt={ticket.tenPhim}
               />
@@ -202,16 +226,32 @@ export function BookingHistory(props) {
                   "DD-MM-YYYY HH:mm A"
                 )}`}{" "}
               </p>
-              <p>
-                Ghế số :
-                {ticket.lstTicket.map((ghe, index) => {
-                  return (
-                    <span className="mr-2 text-red-600" key={index}>
-                      {ghe.seatName}
-                    </span>
-                  );
-                })}
-              </p>
+              <div className="flex">
+                <p> Ghế số</p>
+                <div className="grid grid-cols-10 gap-2 ml-9">
+                  {ticket.lstTicket.map((ghe, index) => {
+                    return (
+                      <span className="mr-2 text-red-600" key={index}>
+                        {ghe.seatName}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+              <div
+                style={{
+                  height: "auto",
+                  maxWidth: 100,
+                  width: "100%",
+                }}
+              >
+                <QRCode
+                  size={256}
+                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                  value={JSON.stringify(qr_generate)}
+                  viewBox={`0 0 256 256`}
+                />
+              </div>
             </div>
           </div>
         </li>

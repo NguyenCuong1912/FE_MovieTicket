@@ -14,6 +14,7 @@ export default function HomeClient(props) {
     dispatch(layDanhSachPhimAction());
     dispatch(lichChieuTheoHeThongRap());
   }, []);
+
   return (
     <div>
       <CarouselClient />

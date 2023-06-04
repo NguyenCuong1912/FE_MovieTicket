@@ -10,12 +10,12 @@ import { history } from "../../App";
 
 export default function Checkout_Success(props) {
   const dispatch = useDispatch();
-  const [time, setTime] = useState("00:00:18");
+  const [time, setTime] = useState("00:00:00");
 
   useEffect(() => {
     const data = JSON.parse(sessionStorage.getItem("STORE"));
     dispatch(datVe(data));
-    setTime(Date.now() + 0.7 * 60 * 1000);
+    setTime(Date.now() + 0.3 * 60 * 1000);
   }, []);
 
   //! Function
@@ -32,12 +32,13 @@ export default function Checkout_Success(props) {
         }}
         className="text-xl text-yellow-300 "
       >
-        Quay lại trang trang chủ sau
+        Trang sẽ đóng sau
         <h2 className="mb-0 text-2xl text-center text-red-600">
           {
             <Countdown
               date={time}
               onComplete={() => {
+                window.close();
                 history.push("/");
               }}
               daysInHours

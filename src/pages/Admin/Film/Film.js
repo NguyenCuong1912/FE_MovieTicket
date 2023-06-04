@@ -14,6 +14,7 @@ import {
   xoaPhimAction,
 } from "../../../redux/Actions/QuanLyPhimAction";
 import { DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
+import moment from "moment";
 export default function Film(props) {
   const { lstPhim } = useSelector((state) => state.QuanLyPhimReducer);
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ export default function Film(props) {
       dataIndex: "id",
       sorter: (a, b) => a.id - b.id,
       defaultSortOrder: "descend",
-      width: "10%",
+      width: "5%",
     },
     {
       title: "Tên Phim",
@@ -34,10 +35,22 @@ export default function Film(props) {
       width: "20%",
     },
     {
-      title: "Tên Phim",
-      dataIndex: "actor",
+      title: "Ngày công chiếu",
+      dataIndex: "showtime",
       width: "10%",
+      render: (text) => {
+        return <p>{moment(text).format("DD/MM/YYYY hh:mm A")}</p>;
+      },
     },
+    {
+      title: "Trạng thái",
+      dataIndex: "comingSoon",
+      width: "10%",
+      render: (text, film) => {
+        return <p>{film.nowShowing ? "Đang chiếu" : "Sắp Chiếu"}</p>;
+      },
+    },
+
     {
       title: "Ảnh",
       dataIndex: "imgFilm",

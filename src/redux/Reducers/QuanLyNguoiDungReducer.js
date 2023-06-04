@@ -11,6 +11,7 @@ if (sessionStorage.getItem("USER_LOGIN")) {
 const initialState = {
   userLogin: userDefault,
   userEdit: {
+    id: "",
     email: "",
     password: "",
     phoneNumber: "",

@@ -17,7 +17,7 @@ import _ from "lodash";
 import moment from "moment";
 import { history } from "../../../App";
 import { layDanhSachGheTheoLichChieu } from "../../../redux/Actions/QuanLySeatsAction";
-import { DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
+import { DOMAIN, DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
 import Countdown from "react-countdown";
 import { RequirementCheckoutAction } from "../../../redux/Actions/QuanLyCheckoutAction";
 import io from "socket.io-client";
@@ -27,6 +27,7 @@ import RoomSizeL from "../../../components/Room/SizeL";
 import RoomSizeS from "../../../components/Room/SizeS";
 import { sizeConst } from "../../../constants/roomSize";
 import RoomNoraml from "../../../components/Room/Normal";
+import axios from "axios";
 
 const { confirm } = Modal;
 export default function Checkout(props) {
@@ -63,6 +64,7 @@ export default function Checkout(props) {
   listGheRef.current = listGheDangDat;
 
   useEffect(() => {
+    sessionStorage.removeItem("STORE");
     const data = { room: id, user: userLogin };
     socketRef.current.emit("join-room", data);
     dispatch(layDanhSachGheTheoLichChieu(id, userLogin));
@@ -315,9 +317,11 @@ export default function Checkout(props) {
           onClick={() => {
             if (JSON.stringify(listGheDangDat) !== "[]") {
               const thongTinVeDat = {
-                userId: userLogin.id,
+                user: userLogin,
                 listTicket: listGheDangDat,
                 idShowTime: props.match.params.id,
+                film: film,
+                email: userLogin.email,
               };
               window.sessionStorage.setItem(
                 "STORE",

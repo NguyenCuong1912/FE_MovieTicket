@@ -3,7 +3,6 @@ import { quanLyNguoiDungServices } from "./../../../../services/QuanLyNguoiDungS
 import { Table } from "antd";
 export default function UserWithShowTime(props) {
   const [state, setState] = useState([]);
-  console.log("data", state);
   const { id } = props.match.params;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -14,7 +13,7 @@ export default function UserWithShowTime(props) {
       );
       if (result.status === 200) {
         console.log(result.data);
-        await setState(result.data.lstUser);
+        await setState(result.data);
       }
     } catch (error) {}
   }, []);
@@ -30,6 +29,19 @@ export default function UserWithShowTime(props) {
     {
       title: "Số Điện Thoại",
       dataIndex: "phoneNumber",
+    },
+    {
+      title: "Ghế",
+      dataIndex: "listSeat",
+      render: (text, item) => {
+        return (
+          <p className="grid grid-cols-10">
+            {item.listSeat.map((seat, index) => {
+              return <p>{seat}</p>;
+            })}
+          </p>
+        );
+      },
     },
     {
       title: "Số Vé Đặt",
