@@ -12,7 +12,7 @@ import { lichChieuTheoHeThongRap } from "../../../redux/Actions/QuanLyLichChieuA
 import { OPEN_MODAL_TRAILER } from "../../../redux/Types/ModalType";
 import { DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
 import { layChiTietPhimAction } from "./../../../redux/Actions/QuanLyPhimAction";
-export default function DetailsFilm(props) {
+function DetailsFilm(props) {
   const dispatch = useDispatch();
   const { phimEdit } = useSelector((state) => state.QuanLyPhimReducer);
   const { showTime } = useSelector((state) => state.QuanLyLichChieuReducer);
@@ -22,17 +22,7 @@ export default function DetailsFilm(props) {
     dispatch(lichChieuTheoHeThongRap(id));
   }, [id]);
 
-  console.log("phimEdit", phimEdit);
-  console.log("showTime", showTime);
   const { TabPane } = Tabs;
-
-  const renderContact = () => {
-    return (
-      <view>
-        <p>Bạn muốn nhắn nhủ gì tới chúng tôi ?</p>
-      </view>
-    );
-  };
 
   const renderDescription = () => {
     return (
@@ -55,12 +45,28 @@ export default function DetailsFilm(props) {
           <p>
             Đạo diễn:
             <br />
-            {phimEdit.actor}
+            <p
+              style={{
+                fontSize: "1rem",
+                fontWeight: "normal",
+                lineHeight: "1.5",
+              }}
+            >
+              {phimEdit.actor}
+            </p>
           </p>
           <p>
             Nội Dung Phim:
             <br />
-            {phimEdit.description}
+            <p
+              style={{
+                fontSize: "1rem",
+                fontWeight: "normal",
+                lineHeight: "1.5",
+              }}
+            >
+              {phimEdit.description}
+            </p>
           </p>
           {/* <ModalTrailer /> */}
           <div
@@ -233,9 +239,6 @@ export default function DetailsFilm(props) {
               <TabPane tab="Chi tiết" key="2">
                 {renderDescription()}
               </TabPane>
-              <TabPane tab="Liên hệ" key="3">
-                Bạn muốn nhắn nhủ gì tới chúng tôi ?
-              </TabPane>
             </Tabs>
           </div>
         </div>
@@ -243,3 +246,4 @@ export default function DetailsFilm(props) {
     </div>
   );
 }
+export default React.memo(DetailsFilm);

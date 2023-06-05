@@ -31,7 +31,7 @@ import RoomSizeM from "../../../components/Room/SizeM";
 import RoomSizeL from "../../../components/Room/SizeL";
 import RoomSizeS from "../../../components/Room/SizeS";
 import { sizeConst } from "../../../constants/roomSize";
-import RoomNoraml from "../../../components/Room/Normal";
+import RoomNormal from "../../../components/Room/Normal";
 
 const { confirm } = Modal;
 export default function Checkout(props) {
@@ -86,7 +86,7 @@ export default function Checkout(props) {
         user: userLogin,
         seats: listGheRef.current,
       };
-      socketRef.current.emit("leaveRroom", payloadLeaveRoom);
+      socketRef.current.emit("leaveRoom", payloadLeaveRoom);
     };
 
     window.addEventListener("beforeunload", () => {
@@ -114,7 +114,7 @@ export default function Checkout(props) {
       cancelType: "success",
       cancelText: "No",
       onOk() {
-        socket.emit("leaveRroom", data);
+        socket.emit("leaveRoom", data);
         history.push("/");
       },
       onCancel() {},
@@ -173,7 +173,7 @@ export default function Checkout(props) {
     }
     if (!sizeConst.includes(showTimeEdit?.room.size)) {
       return (
-        <RoomNoraml
+        <RoomNormal
           seat_of_row={16}
           lstGhe={lstGhe}
           userLogin={userLogin}
@@ -226,11 +226,9 @@ export default function Checkout(props) {
               {
                 <Countdown
                   onComplete={() => {
+                    socket.emit("leaveRoom", data);
+
                     alert("Quá thời gian đặt Vé");
-                    dispatch({
-                      type: CLEAR_VE_DANG_CHON,
-                    });
-                    socket.emit("leaveRroom", data);
                     history.push("/");
                   }}
                   daysInHours

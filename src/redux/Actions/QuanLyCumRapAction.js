@@ -14,7 +14,6 @@ export const layDanhSachCumRapAction = () => {
                     type: SET_GROUP_CINEMAS,
                     dataGroupCinemas: result.data
                 })
-                // dispatch(hiddenLoading)
             }
         } catch (error) {
             console.log(error);

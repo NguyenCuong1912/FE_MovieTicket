@@ -67,8 +67,7 @@ function HomeMenu(props) {
                               className="h-16 w-16 "
                             >
                               <img
-                                st
-                                yle={{ objectFit: "fill", borderRadius: 5 }}
+                                style={{ objectFit: "fill", borderRadius: 8}}
                                 className="w-full h-full"
                                 src={`${DOMAIN_STATIC_FILE}${rap.logo}`}
                                 alt={`${DOMAIN_STATIC_FILE}${rap.logo}`}

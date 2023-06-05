@@ -25,7 +25,14 @@ export default function Film(props) {
         >
           <img
             src={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`}
-            style={{ height: 300, width: '70%', objectFit: 'fill',marginTop:10 ,borderRadius:10,border:'1px solid #ebebec'}}
+            style={{
+              height: 300,
+              width: "70%",
+              objectFit: "fill",
+              marginTop: 10,
+              borderRadius: 10,
+              border: "1px solid #ebebec",
+            }}
             alt={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`}
           />
           <div
@@ -74,7 +81,7 @@ export default function Film(props) {
             </h2>
           </div>
           <p className="moTa text-coolGray-800">
-            {_.truncate(phim.description, { length: 90, separator: "" })}
+            {_.truncate(phim.description, { length: 85, separator: "" })}
           </p>
         </div>
       </div>

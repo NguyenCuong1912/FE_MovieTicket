@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import Seat from "../../Seat";
 
-export default function RoomNoraml(props) {
+export default function RoomNormal(props) {
   const {
     lstGhe,
     userLogin,
