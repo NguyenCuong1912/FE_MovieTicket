@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { quanLyPhongServices } from "../../../services/QuanLyPhongServices";
+import { quanLyRapChieuServices } from "../../../services/QuanLyRapChieuServices";
 import { chiTietRapAction } from "./../../../redux/Actions/QuanLyRapChieuAction";
 export default function DetailsCinema(props) {
   const dispatch = useDispatch();
   const { rapChieuEdit } = useSelector((state) => state.QuanLyRapChieuReducer);
   const [state, setState] = useState({ lstRoom: [] });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     dispatch(chiTietRapAction(props.match.params.id));
     try {
@@ -22,47 +24,6 @@ export default function DetailsCinema(props) {
       console.log(error);
     }
   }, []);
-
-  const adr = (link) => {
-    return (
-      <div
-        id="map-container-google-1"
-        class="z-depth-1-half map-container"
-        style={{
-          height: "500px",
-        }}
-      >
-        <iframe
-          src={link}
-          frameborder="0"
-          style={{
-            border: "0",
-            height: "100%",
-            width: "100%",
-          }}
-          allowfullscreen
-        ></iframe>
-      </div>
-    );
-  };
-
-  const renderMap = (rapChieuEdit) => {
-    switch (rapChieuEdit.id) {
-      case 1:
-        return adr(
-          "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.757025313847!2d105.7995676761801!3d21.002374688682544!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ad5ac9beb0bd%3A0xc4069a08defd1deb!2sChung%20c%C6%B0%20Golden%20West!5e0!3m2!1svi!2s!4v1684310346651!5m2!1svi!2s"
-        );
-      case 2:
-        return adr(
-          "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.757025313847!2d105.7995676761801!3d21.002374688682544!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ad5ac9beb0bd%3A0xc4069a08defd1deb!2sChung%20c%C6%B0%20Golden%20West!5e0!3m2!1svi!2s!4v1684310346651!5m2!1svi!2s"
-        );
-      default:
-        return adr(
-          "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.757025313847!2d105.7995676761801!3d21.002374688682544!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ad5ac9beb0bd%3A0xc4069a08defd1deb!2sChung%20c%C6%B0%20Golden%20West!5e0!3m2!1svi!2s!4v1684310346651!5m2!1svi!2s"
-        );
-    }
-  };
-  console.log("rapChieuEdit", rapChieuEdit);
   return (
     <div className="py-20 px-28">
       <h3 className="text-center text-3xl">Thông Tin Rạp Chiếu</h3>
@@ -75,7 +36,6 @@ export default function DetailsCinema(props) {
                 <span className="font-bold">Địa điểm: </span>
                 {rapChieuEdit.address}
               </li>
-              {renderMap(rapChieuEdit)}
               <li>
                 <span className="font-bold">Email:</span> cskh@tixvn.com
               </li>

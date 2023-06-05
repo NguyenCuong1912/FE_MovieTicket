@@ -17,12 +17,7 @@ import _ from "lodash";
 import moment from "moment";
 import { history } from "../../../App";
 import { layDanhSachGheTheoLichChieu } from "../../../redux/Actions/QuanLySeatsAction";
-import { DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
-import {
-  CHON_GHE,
-  CLEAR_VE_DANG_CHON,
-} from "../../../redux/Types/QuanLySeatsType";
-
+import { DOMAIN, DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
 import Countdown from "react-countdown";
 import { RequirementCheckoutAction } from "../../../redux/Actions/QuanLyCheckoutAction";
 import io from "socket.io-client";
@@ -31,7 +26,8 @@ import RoomSizeM from "../../../components/Room/SizeM";
 import RoomSizeL from "../../../components/Room/SizeL";
 import RoomSizeS from "../../../components/Room/SizeS";
 import { sizeConst } from "../../../constants/roomSize";
-import RoomNormal from "../../../components/Room/Normal";
+import RoomNoraml from "../../../components/Room/Normal";
+import axios from "axios";
 
 const { confirm } = Modal;
 export default function Checkout(props) {
@@ -68,17 +64,15 @@ export default function Checkout(props) {
   listGheRef.current = listGheDangDat;
 
   useEffect(() => {
+    sessionStorage.removeItem("STORE");
     const data = { room: id, user: userLogin };
     socketRef.current.emit("join-room", data);
     dispatch(layDanhSachGheTheoLichChieu(id, userLogin));
     dispatch(chiTietLichChieuAction(id));
-    dispatch({
-      type: CLEAR_VE_DANG_CHON,
-    });
     // setState(Date.now() + 5 * 60 * 1000);
     setState(Date.now() + 10 * 60 * 1000);
   }, []);
-
+  //! event leave Room
   useEffect(() => {
     const leaveRoom = () => {
       const payloadLeaveRoom = {
@@ -86,7 +80,7 @@ export default function Checkout(props) {
         user: userLogin,
         seats: listGheRef.current,
       };
-      socketRef.current.emit("leaveRoom", payloadLeaveRoom);
+      socketRef.current.emit("leaveRroom", payloadLeaveRoom);
     };
 
     window.addEventListener("beforeunload", () => {
@@ -143,9 +137,6 @@ export default function Checkout(props) {
           userLogin={userLogin}
           handleSocket={handleSocket}
           idShowtime={id}
-          preSeat
-          currentSeat
-          nextSeat
         />
       );
     }
@@ -226,8 +217,7 @@ export default function Checkout(props) {
               {
                 <Countdown
                   onComplete={() => {
-                    socket.emit("leaveRoom", data);
-
+                    socket.emit("leaveRroom", data);
                     alert("Quá thời gian đặt Vé");
                     history.push("/");
                   }}
@@ -327,9 +317,11 @@ export default function Checkout(props) {
           onClick={() => {
             if (JSON.stringify(listGheDangDat) !== "[]") {
               const thongTinVeDat = {
-                userId: userLogin.id,
+                user: userLogin,
                 listTicket: listGheDangDat,
                 idShowTime: props.match.params.id,
+                film: film,
+                email: userLogin.email,
               };
               window.sessionStorage.setItem(
                 "STORE",

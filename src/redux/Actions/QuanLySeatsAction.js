@@ -1,4 +1,5 @@
 import { quanLySeatsServices } from "../../services/QuanLySeatsServices";
+import { DISPLAY_LOADING, HIDDEN_LOADING } from "../Types/LoadingType";
 import { SET_LIST_GHE } from "./../Types/QuanLySeatsType";
 
 export const themSeatsAction = (dataCreate) => {
@@ -16,6 +17,9 @@ export const themSeatsAction = (dataCreate) => {
 export const layDanhSachGheTheoLichChieu = (idShowTime, userLogin) => {
   return async (dispatch) => {
     try {
+      dispatch({
+        type: DISPLAY_LOADING,
+      });
       const result = await quanLySeatsServices.layDanhSachGheTheoLichCHieu(
         idShowTime
       );
@@ -27,8 +31,14 @@ export const layDanhSachGheTheoLichChieu = (idShowTime, userLogin) => {
             phongve: result.data,
           },
         });
+        dispatch({
+          type: HIDDEN_LOADING,
+        });
       }
     } catch (error) {
+      dispatch({
+        type: HIDDEN_LOADING,
+      });
       console.log(error);
     }
   };

@@ -51,21 +51,20 @@ import RoomPreview from "./components/Room/Preview";
 const socket = io.connect(`${DOMAIN_STATIC_FILE}`);
 export const history = createBrowserHistory();
 export default function App() {
-
   React.useEffect(() => {
-    window.addEventListener('error', e => {
-      if (e.message === 'ResizeObserver loop limit exceeded') {
+    window.addEventListener("error", (e) => {
+      if (e.message === "ResizeObserver loop limit exceeded") {
         const resizeObserverErrDiv = document.getElementById(
-          'webpack-dev-server-client-overlay-div'
+          "webpack-dev-server-client-overlay-div"
         );
         const resizeObserverErr = document.getElementById(
-          'webpack-dev-server-client-overlay'
+          "webpack-dev-server-client-overlay"
         );
         if (resizeObserverErr) {
-          resizeObserverErr.setAttribute('style', 'display: none');
+          resizeObserverErr.setAttribute("style", "display: none");
         }
         if (resizeObserverErrDiv) {
-          resizeObserverErrDiv.setAttribute('style', 'display: none');
+          resizeObserverErrDiv.setAttribute("style", "display: none");
         }
       }
     });

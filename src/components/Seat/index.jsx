@@ -4,24 +4,30 @@ import { useSelector } from "react-redux";
 import "./Ghe.css";
 
 export default React.memo(function Seat(props) {
-  const {
-    ghe,
-    classGheBanDat,
-    classGheDangDat,
-    classGheDaDat,
-    handleSocket,
-    idShowtime,
-    className,
-  } = props;
+  const { ghe, handleSocket, idShowtime, className } = props;
 
   const userLogin = useSelector(
     (state) => state.QuanLyNguoiDungReducer.userLogin
   );
+  let classGheDaDat =
+    ghe.bookded && ghe.idUser !== userLogin.id ? "gheDaDat" : "";
+  let classGheBanDat = "";
+  let classGheDangDat = "";
+  //! seat you booked
+  ghe.idUser === userLogin?.id
+    ? (classGheBanDat = "gheBanDat")
+    : (classGheBanDat = "");
+  //! keepSeat
+  if (!!ghe?.keepSeat && !ghe?.bookded) {
+    classGheDangDat =
+      parseInt(ghe.keepSeat) === userLogin?.id
+        ? "gheBanDangDat"
+        : "gheNguoiKhacDat";
+  }
   return (
     <button
       onClick={() => {
         handleSocket(userLogin, idShowtime, ghe);
-        // handleChoiceSeat(preSeat, currentSeat, nextSeat);
       }}
       disabled={
         ghe?.bookded || classGheDangDat === "gheNguoiKhacDat" || className

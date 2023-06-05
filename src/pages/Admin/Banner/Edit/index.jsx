@@ -5,6 +5,8 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Form } from "antd";
 import { DOMAIN_STATIC_FILE } from "../../../../utils/Settings/config";
+import { UpdateBannerAction } from "../../../../redux/Actions/BannerAction";
+
 export default function EditBanner(props) {
   const { id } = props.match.params;
   const { detailBanner } = useSelector((state) => state.BannerReducer);
@@ -12,7 +14,6 @@ export default function EditBanner(props) {
   useEffect(() => {
     dispatch(detailBannerAction(id));
   }, []);
-  console.log(detailBanner);
   //! Function
   const [srcImg, setSrcImg] = useState("");
 
@@ -48,6 +49,7 @@ export default function EditBanner(props) {
       for (var key in values) {
         formData.append("banner", values.image, values.image.name);
       }
+      dispatch(UpdateBannerAction(id, formData));
     },
   });
   return (

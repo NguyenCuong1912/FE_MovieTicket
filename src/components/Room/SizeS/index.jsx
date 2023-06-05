@@ -17,28 +17,11 @@ function RoomSizeS(props) {
   return (
     <div>
       {lstGhe?.map((ghe, index) => {
-        let classGheDaDat = ghe.bookded ? "gheDaDat" : "";
-        let classGheBanDat = "";
-        let classGheDangDat = "";
-        //! seat you booked
-        ghe.idUser === userLogin?.id
-          ? (classGheBanDat = "gheBanDat")
-          : (classGheBanDat = "");
-        //! keepSeat
-        if (!!ghe.keepSeat) {
-          classGheDangDat =
-            parseInt(ghe.keepSeat) === userLogin.id
-              ? "gheBanDangDat"
-              : "gheNguoiKhacDat";
-        }
         return (
           <Fragment key={ghe.id}>
             <Seat
               ghe={ghe}
               userLogin={userLogin}
-              classGheDaDat={classGheDaDat}
-              classGheBanDat={classGheBanDat}
-              classGheDangDat={classGheDangDat}
               handleSocket={handleSocket}
               idShowtime={idShowtime}
               className={className}

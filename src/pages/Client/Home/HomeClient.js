@@ -5,7 +5,6 @@ import { lichChieuTheoHeThongRap } from "../../../redux/Actions/QuanLyLichChieuA
 import { layDanhSachPhimAction } from "../../../redux/Actions/QuanLyPhimAction";
 import CarouselClient from "../../../templates/ClientTemplate/Template/Carousel/CarouselClient";
 import HomeMenu from "./HomeMenu";
-import Skeleton from "react-loading-skeleton";
 export default function HomeClient(props) {
   const { lstPhim } = useSelector((state) => state.QuanLyPhimReducer);
   const { showTime } = useSelector((state) => state.QuanLyLichChieuReducer);
@@ -16,6 +15,7 @@ export default function HomeClient(props) {
     dispatch(layDanhSachPhimAction());
     dispatch(lichChieuTheoHeThongRap());
   }, []);
+
   return (
     <div>
       {showTime.length > 0 && lstPhim.length > 0 ? (
