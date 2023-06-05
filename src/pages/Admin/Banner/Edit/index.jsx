@@ -39,9 +39,7 @@ export default function EditBanner(props) {
     initialValues: {
       image: {},
     },
-    validationSchema: Yup.object({
-      // image: Yup.object.
-    }),
+    validationSchema: Yup.object({}),
     onSubmit: (values) => {
       if (!values.image.name) {
         alert("Bạn cần chọn ảnh để sửa  ");
@@ -83,7 +81,7 @@ export default function EditBanner(props) {
           )}
           <br />
           <img
-            style={{ width: 150, height: 150 }}
+            style={{ width: 300, height: 150 }}
             src={
               srcImg === ""
                 ? `${DOMAIN_STATIC_FILE}${detailBanner.image}`

@@ -17,6 +17,7 @@ import { DOMAIN_STATIC_FILE } from "../../../utils/Settings/config";
 import moment from "moment";
 export default function Film(props) {
   const { lstPhim } = useSelector((state) => state.QuanLyPhimReducer);
+  console.log(lstPhim);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(layDanhSachPhimAction());
@@ -59,14 +60,11 @@ export default function Film(props) {
           <div
             style={{
               width: 100,
-              height: 100,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundImage: `url(${DOMAIN_STATIC_FILE}${film.imgFilm})`,
+              height: 140,
             }}
           >
             <img
-              style={{ width: 100, height: 100, opacity: 1 }}
+              style={{ width: '100%', height: '100%', opacity: 1 }}
               src={`${DOMAIN_STATIC_FILE}${film.imgFilm}`}
               alt={film.imgFilm}
               onError={({ currentTarget }) => {

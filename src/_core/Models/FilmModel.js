@@ -8,4 +8,5 @@ export class ThongTinPhim {
     comingSoon = false
     rate = ''
     imgFilm = ''
+    actor = ''
 }

@@ -1,6 +1,8 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Slider from "react-slick";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import {
   ALL_PHIM,
   PHIM_DANG_CHIEU,

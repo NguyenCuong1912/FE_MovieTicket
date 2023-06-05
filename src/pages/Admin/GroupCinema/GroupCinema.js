@@ -30,12 +30,12 @@ export default function GroupCinema(props) {
             dataIndex: 'logo',
             render: (text, cumRap) => {
                 return <div style={{ width: 100, height: 100, backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url(${DOMAIN_STATIC_FILE}${cumRap.logo})` }}>
-                    <img style={{ width: 100, height: 100, opacity: 1 }} src={`${DOMAIN_STATIC_FILE}${cumRap.logo}`} alt={cumRap.logo}
+                    {/* <img style={{ width: 100, height: 100, opacity: 1 }} src={`${DOMAIN_STATIC_FILE}${cumRap.logo}`} alt={cumRap.logo}
                         onError={({ currentTarget }) => {
                             currentTarget.onerror = null; // prevents looping
                             currentTarget.src = `https://picsum.photos/id/200/300`;
                         }}
-                    />
+                    /> */}
                 </div>
             },
             width: '15%'

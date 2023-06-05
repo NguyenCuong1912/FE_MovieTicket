@@ -108,7 +108,7 @@ export default function Checkout(props) {
       cancelType: "success",
       cancelText: "No",
       onOk() {
-        socket.emit("leaveRroom", data);
+        socket.emit("leaveRoom", data);
         history.push("/");
       },
       onCancel() {},
@@ -164,7 +164,7 @@ export default function Checkout(props) {
     }
     if (!sizeConst.includes(showTimeEdit?.room.size)) {
       return (
-        <RoomNoraml
+        <RoomNormal
           seat_of_row={16}
           lstGhe={lstGhe}
           userLogin={userLogin}

@@ -18,7 +18,7 @@ export class BannerServices extends baseServices {
     return this.delete(`/banners/${id}`);
   };
   createBanner = (data) => {
-    return this.post("/banners", data);
+    return this.post("banners", data);
   };
   changeStatus = (id, data) => {
     return this.put(`/banners/status/${id}`, data);

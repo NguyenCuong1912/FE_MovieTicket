@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import Seat from "../../Seat";
 
-export default function RoomNoraml(props) {
+export default function RoomNormal(props) {
   const {
     lstGhe,
     userLogin,
@@ -14,7 +14,7 @@ export default function RoomNoraml(props) {
     <div>
       {lstGhe?.map((ghe, index) => {
         return (
-          <Fragment key={index}>
+          <Fragment key={ghe.id}>
             <Seat
               ghe={ghe}
               userLogin={userLogin}
@@ -22,7 +22,6 @@ export default function RoomNoraml(props) {
               idShowtime={idShowtime}
               className={className}
             />
-
             {(index + 1) % seat_of_row === 0 ? <br /> : ""}
           </Fragment>
         );

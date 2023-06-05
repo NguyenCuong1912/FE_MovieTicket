@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { PlayCircleOutlined } from "@ant-design/icons";
 import _ from "lodash";
 import "./Film.css";
@@ -7,32 +7,41 @@ import { useDispatch } from "react-redux";
 import { DOMAIN_STATIC_FILE } from "../../utils/Settings/config";
 import { OPEN_MODAL_TRAILER } from "../../redux/Types/ModalType";
 import { history } from "../../App";
+import { PHIM_DANG_CHIEU } from "../../redux/Types/QuanLyPhimType";
 export default function Film(props) {
   const { phim } = props;
   const dispatch = useDispatch();
+
   return (
-    <div className="parent" style={{ height: 500 }}>
-      <div className="flex flex-col  h-full mx-2 p-2 rounded-md shadow-md ">
+    <div className="parent my-10" style={{ height: 500 }}>
+      <div className="flex flex-col  h-full mx-10 my-10 p-2 rounded-md shadow-md ">
         <div
           style={{
-            backgroundImage: `url(${DOMAIN_STATIC_FILE}${phim.imgFilm})`,
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
             position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <img
             src={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`}
-            className="opacity-0 w-full"
-            style={{ height: 300 }}
+            style={{
+              height: 300,
+              width: "70%",
+              objectFit: "fill",
+              marginTop: 10,
+              borderRadius: 10,
+              border: "1px solid #ebebec",
+            }}
             alt={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`}
           />
           <div
             className="w-full playVideo "
             style={{
-              top: 0,
+              top: 10,
+              width: "70%",
               height: 300,
+              borderRadius: 10,
               position: "absolute",
               backgroundColor: "rgba(0,0,0,.5)",
               display: "flex",
@@ -59,11 +68,12 @@ export default function Film(props) {
             </div>
           </div>
         </div>
+
         <div
           onClick={() => {
             history.push(`/DetailsFilm/${phim.id}`);
           }}
-          className="cursor-pointer"
+          className="cursor-pointer mx-6"
         >
           <div className="mt-6 mb-2">
             <h2 className="text-xl h-16 font-semibold tracking-wide">
@@ -71,7 +81,7 @@ export default function Film(props) {
             </h2>
           </div>
           <p className="moTa text-coolGray-800">
-            {_.truncate(phim.description, { length: 80, separator: "" })}
+            {_.truncate(phim.description, { length: 85, separator: "" })}
           </p>
         </div>
       </div>
